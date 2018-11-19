@@ -5,11 +5,14 @@ package GUI.windows;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+import javax.print.attribute.AttributeSet;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.text.PlainDocument;
 
 
 
@@ -27,7 +30,7 @@ public class loginWindow extends JFrame {
 	}
 	public void launchLoginWindow(){
 		this.setLayout(new FlowLayout());
-		this.setTitle("Debts Rus State Bank");
+		this.setTitle("User Login");
 		this.setSize(240,120);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -49,9 +52,10 @@ public class loginWindow extends JFrame {
 		    }  
 		});
 		this.add(this.password);
+		//LoginButtonMonitor lbm = new LoginButtonMonitor(this);
 		JButton loginButton = new JButton("Login");
 		loginButton.setActionCommand("1");
-		//needs a button listener
+		//loginButton.addActionListener(lbm);
 		this.add(loginButton);
 		this.setVisible(true);
 	}
@@ -62,5 +66,20 @@ public class loginWindow extends JFrame {
 
 	
 }
-
+//class JTextFieldLimit extends PlainDocument {
+//	  private int limit;
+//
+//	  JTextFieldLimit(int limit) {
+//	   super();
+//	   this.limit = limit;
+//	   }
+//
+//	  public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
+//	    if (str == null) return;
+//
+//	    if ((getLength() + str.length()) <= limit) {
+//	      super.insertString(offset, str, attr);
+//	    }
+//	  }
+//	}
 

@@ -27,7 +27,7 @@ public class loginWindow extends JFrame {
 	}
 	public void launchLoginWindow(){
 		this.setLayout(new FlowLayout());
-		this.setTitle("Debts Rus State Bank");
+		this.setTitle("User Login");
 		this.setSize(240,120);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
