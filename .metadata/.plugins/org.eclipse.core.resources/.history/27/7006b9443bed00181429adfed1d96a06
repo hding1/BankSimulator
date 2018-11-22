@@ -1,0 +1,50 @@
+package GUI.windows;
+
+import java.awt.FlowLayout;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+//import GUI.monitor.SelectButtonMonitor;
+
+
+
+public class SelectWindow extends JFrame {
+	public void launchSelectwindow(){
+		this.setLayout(new FlowLayout());
+		this.setTitle("—°‘Òπ¶ƒ‹");
+		this.setSize(100,250);
+		this.setResizable(false);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+//		SelectButtonMonitor sbm = new SelectButtonMonitor(this);
+		JButton Button1 = new JButton("≤È—Ø’Àªß");
+		Button1.setActionCommand("1");
+//		Button1.addActionListener(sbm);
+		this.add(Button1);
+		JButton Button2 = new JButton("–ﬁ∏ƒ√‹¬Î");
+		Button2.setActionCommand("2");
+//		Button2.addActionListener(sbm);
+		this.add(Button2);
+		JButton Button3 = new JButton("¥ÊøÓ");
+		Button3.setActionCommand("3");
+//		Button3.addActionListener(sbm);
+		this.add(Button3);
+		JButton Button4 = new JButton("»°øÓ");
+		Button4.setActionCommand("4");
+//		Button4.addActionListener(sbm);
+		this.add(Button4);
+		JButton Button5 = new JButton("Ωª“◊”‡∂Ó");
+		Button5.setActionCommand("5");
+//		Button5.addActionListener(sbm);
+		this.add(Button5);
+		JButton Button6 = new JButton("ÕÀ≥ˆ");
+		Button6.setActionCommand("6");
+//		Button6.addActionListener(sbm);
+		this.add(Button6);	
+		
+		this.setVisible(true);
+	}
+	
+}

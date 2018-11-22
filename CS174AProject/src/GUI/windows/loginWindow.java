@@ -1,7 +1,5 @@
 package GUI.windows;
 
-
-
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -10,9 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
-
-
+import GUI.monitor.LoginButtonMonitor;
 
 public class loginWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +23,7 @@ public class loginWindow extends JFrame {
 	}
 	public void launchLoginWindow(){
 		this.setLayout(new FlowLayout());
-		this.setTitle("Debts Rus State Bank");
+		this.setTitle("DebtsRus State Bank");
 		this.setSize(240,120);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -50,8 +46,10 @@ public class loginWindow extends JFrame {
 		});
 		this.add(this.password);
 		JButton loginButton = new JButton("Login");
+		LoginButtonMonitor lbm = new LoginButtonMonitor(this);
 		loginButton.setActionCommand("1");
 		//needs a button listener
+		loginButton.addActionListener(lbm);
 		this.add(loginButton);
 		this.setVisible(true);
 	}

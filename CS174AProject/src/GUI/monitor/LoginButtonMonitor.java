@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 
 import GUI.windows.loginWindow;
-//import GUI.window.NextWindow
+import GUI.windows.SelectWindow;
 
 public class LoginButtonMonitor implements ActionListener {
 	private loginWindow loginWindow;
@@ -29,8 +29,11 @@ public class LoginButtonMonitor implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-
+		this.loginWindow.setVisible(false);
+		SelectWindow selectwindow=new SelectWindow();
+		selectwindow.launchSelectwindow();
 		// TODO prompt next window
+		
 //		if(validate()){
 //
 //		}
