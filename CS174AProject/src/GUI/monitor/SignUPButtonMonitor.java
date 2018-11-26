@@ -40,11 +40,6 @@ public class SignUPButtonMonitor implements ActionListener{
 	 * @param loginWindow
 	 */
 	
-	static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
-	static final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
-
-	static final String USERNAME = "fliang";
-	static final String PASSWORD = "123455";
 	
 	public SignUPButtonMonitor(loginWindow loginWindow) {
 		this.loginWindow = loginWindow;
