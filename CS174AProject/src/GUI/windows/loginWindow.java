@@ -48,14 +48,17 @@ public class loginWindow extends JFrame {
 		    }  
 		});
 		this.add(this.password);
+		
 		JButton loginButton = new JButton("Login");
 		LoginButtonMonitor lbm = new LoginButtonMonitor(this);
 		loginButton.setActionCommand("1");
-		//needs a button listener
 		loginButton.addActionListener(lbm);
 		this.add(loginButton);
 		
 		JButton SignUP = new JButton("Sign up");
+		SignUPButtonMonitor subm = new SignUPButtonMonitor(this);
+		SignUP.setActionCommand("1");
+		SignUP.addActionListener(subm);
 		this.add(SignUP);
 		
 		
