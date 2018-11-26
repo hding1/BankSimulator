@@ -19,7 +19,6 @@ import java.sql.*;
 
 public class LoginButtonMonitor implements ActionListener {
 	private loginWindow loginWindow;
-	private String userid;
 
 	/**
 
@@ -38,18 +37,19 @@ public class LoginButtonMonitor implements ActionListener {
 		this.loginWindow = loginWindow;
 	}
 	
-	public LoginButtonMonitor(loginWindow loginWindow, String userid) {
-		this.loginWindow = loginWindow;
-		this.userid = userid;
-	}
+
 
 	//@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(this.loginWindow.getUserid().getText());
 		
 		Connection conn = null;
 		Statement stmt = null;
+		
+		if(new String("").equals(this.loginWindow.getUserid().getText())) {
+			JOptionPane.showMessageDialog(null, "TIN Field is blank!", "", JOptionPane.PLAIN_MESSAGE);
+			return;
+		}
 		
 		try{
 		      //STEP 2: Register JDBC driver
