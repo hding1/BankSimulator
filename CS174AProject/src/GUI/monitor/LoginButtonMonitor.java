@@ -15,23 +15,93 @@ import javax.swing.JOptionPane;
 import GUI.windows.loginWindow;
 import GUI.windows.SelectWindow;
 
+import java.sql.*;
+
 public class LoginButtonMonitor implements ActionListener {
 	private loginWindow loginWindow;
+	private String userid;
 
 	/**
 
 	 * @param loginWindow
 	 */
+	
+	static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+	static final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
+
+	static final String USERNAME = "fliang";
+	static final String PASSWORD = "123455";
+	
+
+	
 	public LoginButtonMonitor(loginWindow loginWindow) {
 		this.loginWindow = loginWindow;
 	}
+	
+	public LoginButtonMonitor(loginWindow loginWindow, String userid) {
+		this.loginWindow = loginWindow;
+		this.userid = userid;
+	}
 
-	@Override
+	//@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.loginWindow.setVisible(false);
-		SelectWindow selectwindow=new SelectWindow();
-		selectwindow.launchSelectwindow();
+		System.out.println(this.loginWindow.getUserid().getText());
+		
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try{
+		      //STEP 2: Register JDBC driver
+		      Class.forName(JDBC_DRIVER);
+
+		      //STEP 3: Open a connection
+		      System.out.println("Connecting to a selected database...");
+		      conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+		      System.out.println("Connected database successfully...");
+		      
+		      //STEP 4: Execute a query
+		      System.out.println("Creating statement...");
+		      stmt = conn.createStatement();
+
+		      String sql = "SELECT cid, cname, city, discount FROM cs174.Customers";
+		      ResultSet rs = stmt.executeQuery(sql);
+		      
+		      while(rs.next()) {
+		    	  String cid = rs.getString("cid");
+		    	  if(new String(cid).equals(this.loginWindow.getUserid().getText())) {
+		    			this.loginWindow.setVisible(false);
+		    			SelectWindow selectwindow=new SelectWindow();
+		    			selectwindow.launchSelectwindow();
+		    			return;
+		    	  }
+		      }
+		      JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
+		      rs.close();
+		}catch(SQLException se){
+		      //Handle errors for JDBC
+		      se.printStackTrace();
+		}catch(Exception ea){
+		      //Handle errors for Class.forName
+		      ea.printStackTrace();
+		}finally{
+		      //finally block used to close resources
+			try{
+		         if(stmt!=null)
+		            conn.close();
+		    }catch(SQLException se){
+		    }// do nothing
+		    try{
+		         if(conn!=null)
+		            conn.close();
+		    }catch(SQLException se){
+		         se.printStackTrace();
+		    }//end finally try
+		}
+		
+		//this.loginWindow.setVisible(false);
+		//SelectWindow selectwindow=new SelectWindow();
+		//selectwindow.launchSelectwindow();
 		// TODO prompt next window
 		
 //		if(validate()){

@@ -1,7 +1,9 @@
 package GUI.windows;
 
 import java.awt.Dimension;
+
 import java.awt.FlowLayout;
+
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -50,14 +52,18 @@ public class loginWindow extends JFrame {
 		loginButton.setActionCommand("1");
 		//needs a button listener
 		loginButton.addActionListener(lbm);
+		//loginButton.addActionListener(new LoginButtonMonitor(this));
 		this.add(loginButton);
 		this.setVisible(true);
+		
+
+		
 	}
 	public static void main(String[] args) {
 		loginWindow lw = new loginWindow();
 		lw.launchLoginWindow();
 	}
-
+	
 	
 }
 
