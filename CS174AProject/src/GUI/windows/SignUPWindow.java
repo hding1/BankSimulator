@@ -26,7 +26,9 @@ import GUI.monitor.SignUPButtonMonitor;
 public class SignUPWindow extends JFrame{
 	private JTextField userid;
 	private JPasswordField password;	
-	private JTextField userName;
+	private JTextField pname;
+	private JTextField bname;
+
 	
 
 	
@@ -34,20 +36,22 @@ public class SignUPWindow extends JFrame{
 	public void launchSignUPWindow(){
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
 		this.setTitle("Sign Up");
-		this.setSize(300,180);
+		this.setSize(300,280);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		SignUPButtonMonitor subm = new SignUPButtonMonitor(this);
 		
-		JLabel userLabel = new JLabel("Your ID:         ");
-		JLabel pwdLabel = new JLabel("Your Password:         ");
+		JLabel userLabel = new JLabel("ID:         ");
+		JLabel pwdLabel = new JLabel("Password:         ");
+		JLabel userName = new JLabel("Your Name:         ");
+		JLabel branchName = new JLabel("Bank Name:         ");
 		this.add(userLabel);
 		Dimension dim = new Dimension(160, 20);
 		this.userid = new JTextField();
 		this.userid.setPreferredSize(dim);
+		this.add(userLabel);
 		this.add(this.userid);
-		this.add(pwdLabel);
 		this.password = new JPasswordField();
 		this.password.setPreferredSize(dim);
 		password.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -56,25 +60,27 @@ public class SignUPWindow extends JFrame{
 		            e.consume(); 
 		    }  
 		});
+		this.add(pwdLabel);
 		this.add(this.password);
-		JLabel userName = new JLabel("Your Name:         ");
-		this.add(userLabel);
-		this.userName = new JTextField();
-		this.userName.setPreferredSize(dim);
-		this.add(this.userName);
+		this.pname = new JTextField();
+		this.pname.setPreferredSize(dim);
+		this.add(userName);
+		this.add(this.pname);
+		this.bname = new JTextField();
+		this.bname.setPreferredSize(dim);
+		this.add(branchName);
+		this.add(this.bname);
 
-
-
-		
 		JButton Button1 = new JButton("Register");
 		Button1.setActionCommand("1");
 		Button1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		Button1.setAlignmentY(Component.CENTER_ALIGNMENT);
 		Button1.setHorizontalAlignment(SwingConstants.CENTER);
 		Button1.setMinimumSize(new Dimension(100,20));
 		Button1.setMaximumSize(new Dimension(150,30));
-		Button1.addActionListener(new MyButton1Listener(this));
+		Button1.addActionListener(new MyButton1Listener(this) );
 		this.getContentPane().add(Button1);
+
+
 		
 		
 		this.setVisible(true);
@@ -98,6 +104,9 @@ public class SignUPWindow extends JFrame{
 		}
 	
         public void actionPerformed(ActionEvent a){
+        	
+
+        	
         	//TO DO:
         	//INSERT INFORMATION INTO SQL TABLE
         	
@@ -114,8 +123,8 @@ public class SignUPWindow extends JFrame{
   		      System.out.println("Creating statement...");
   		      stmt = conn.createStatement();
   		      
-          	createTable(conn);
-          	insert(conn);
+  		      createTable(conn);
+  		      insert(conn);
 
   		}catch(SQLException se){
   		      //Handle errors for JDBC
@@ -149,20 +158,31 @@ public class SignUPWindow extends JFrame{
 	
         public void createTable(Connection conn) throws Exception {
         	try {
-        		PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS Account(Aid INTEGER, Primary_owner CHAR(10), Amount DOUBLE, Branch CHAR(11), Open BOOLEAN, PRIMARY KEY(Aid))");
+        		PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS Account(Aid INTEGER, Pin INTEGER, Primary_owner CHAR(15), Amount DOUBLE, Branch CHAR(11), Open BOOLEAN, PRIMARY KEY(Aid))");
         		create.executeUpdate();	
+        		System.out.println("Table Created");
         	}catch(Exception e){
         		System.out.println(e);
         	}finally {
-        		System.out.println("Function complete.");
+        		System.out.println("Function completed");
         	}
         }
         
         public void insert(Connection conn) throws Exception {
-        	String new_ID = userid.getText();
-        	//try {
-        		//PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Primary_owner, Amount, Branch, Open) VALUES ()");
-        	//} 
+        	String new_id = this.supw.userid.getText();
+        	String new_pin = String.valueOf(this.supw.password.getPassword());
+        	String new_name = this.supw.pname.getText();
+        	String new_branch = this.supw.bname.getText();
+        	String initialAmount = "0";
+        	String initialStatus = "true";
+        	try {
+        		PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Pin, Primary_owner, Amount, Branch, Open) VALUES ('" + new_id + "', '" + new_pin + "', '" + new_name + "', '" + initialAmount + "', '" + new_branch + "', '" + initialStatus + "')");
+        		
+        		insert.executeUpdate();
+        	} catch(Exception e) {System.out.println(e);}
+        	finally {
+        		System.out.println("insert completed!");
+        	}
         }
 	}
 	

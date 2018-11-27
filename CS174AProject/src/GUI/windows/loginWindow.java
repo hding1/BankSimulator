@@ -64,11 +64,6 @@ public class loginWindow extends JFrame {
 		
 		
 		this.setVisible(true);
-		
-		
-		
-
-		
 	}
 	public static void main(String[] args) {
 		loginWindow lw = new loginWindow();
