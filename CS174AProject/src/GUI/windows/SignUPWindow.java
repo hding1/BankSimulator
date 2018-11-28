@@ -86,6 +86,7 @@ public class SignUPWindow extends JFrame{
 		this.setVisible(true);
 	}
 	
+	
 	public class MyButton1Listener implements ActionListener{
 		SignUPWindow supw;
 		
@@ -158,7 +159,7 @@ public class SignUPWindow extends JFrame{
 	
         public void createTable(Connection conn) throws Exception {
         	try {
-        		PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS Account(Aid INTEGER, Pin INTEGER, Primary_owner CHAR(15), Amount DOUBLE, Branch CHAR(11), Open BOOLEAN, PRIMARY KEY(Aid))");
+        		PreparedStatement create = conn.prepareStatement("CREATE TABLE IF NOT EXISTS Account( Aid CHAR(10), Pin CHAR(4), PrimaryOwner CHAR(15), Amount FLOAT, Branch CHAR(11), Open CHAR(1), PRIMARY KEY(Aid));");
         		create.executeUpdate();	
         		System.out.println("Table Created");
         	}catch(Exception e){
@@ -174,14 +175,16 @@ public class SignUPWindow extends JFrame{
         	String new_name = this.supw.pname.getText();
         	String new_branch = this.supw.bname.getText();
         	String initialAmount = "0";
-        	String initialStatus = "true";
+        	String initialStatus = "1";
         	try {
-        		PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Pin, Primary_owner, Amount, Branch, Open) VALUES ('" + new_id + "', '" + new_pin + "', '" + new_name + "', '" + initialAmount + "', '" + new_branch + "', '" + initialStatus + "')");
+        		PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Pin, PrimaryOwner, Amount, Branch, Open) VALUES ('" + new_id + "', '" + new_pin + "', '" + new_name + "', '" + initialAmount + "', '" + new_branch + "', '" + initialStatus + "')");
         		
         		insert.executeUpdate();
+        		System.out.println("Insert completed!");
+        		
         	} catch(Exception e) {System.out.println(e);}
         	finally {
-        		System.out.println("insert completed!");
+        		System.out.println("funcion completed!");
         	}
         }
 	}

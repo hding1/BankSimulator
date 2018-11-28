@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 
 import GUI.windows.loginWindow;
 import GUI.windows.SelectWindow;
+import GUI.windows.BankTellerWindow;
 
 import java.sql.*;
 
@@ -42,6 +43,16 @@ public class LoginButtonMonitor implements ActionListener {
 	//@Override
 	public void actionPerformed(ActionEvent e) {
 
+		System.out.println(this.loginWindow.getUserid().getText() + " " + String.valueOf(this.loginWindow.getPassword().getPassword()));
+		
+		
+		if(new String(this.loginWindow.getUserid().getText()).equals("0000000000") && new String(String.valueOf(this.loginWindow.getPassword().getPassword())).equals("1234")) {
+			this.loginWindow.setVisible(false);
+			BankTellerWindow bankTellerWindow=new BankTellerWindow();
+			bankTellerWindow.launchBankTellerWindow();
+			return;
+		}
+		else {
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -64,11 +75,12 @@ public class LoginButtonMonitor implements ActionListener {
 		      System.out.println("Creating statement...");
 		      stmt = conn.createStatement();
 
-		      String sql = "SELECT cid, cname, city, discount FROM cs174.Customers";
+		      //String sql = "SELECT cid, cname, city, discount FROM cs174.Customers";
+		      String sql = "SELECT Aid FROM Account";
 		      ResultSet rs = stmt.executeQuery(sql);
 		      
 		      while(rs.next()) {
-		    	  String cid = rs.getString("cid");
+		    	  String cid = rs.getString("Aid");
 		    	  if(new String(cid).equals(this.loginWindow.getUserid().getText())) {
 		    			this.loginWindow.setVisible(false);
 		    			SelectWindow selectwindow=new SelectWindow();
@@ -112,6 +124,7 @@ public class LoginButtonMonitor implements ActionListener {
 //			loginWindow lw1 = new loginWindow();
 //			lw1.launchLoginWindow();
 //		}
+	}
 	}
 	public int	validate(){
 		String userid = this.loginWindow.getUserid().getText();
