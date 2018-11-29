@@ -147,7 +147,6 @@ public class SignUPWindow extends JFrame {
 
 		// Type
 		TypeList.setPreferredSize(dim);
-		TypeList.addActionListener(new MyJcomboboxListener(TypeList));
 		this.add(typeName);
 		this.getContentPane().add(TypeList);
 
@@ -160,6 +159,10 @@ public class SignUPWindow extends JFrame {
 		Button1.setMaximumSize(new Dimension(150, 30));
 		Button1.addActionListener(subm);
 		this.getContentPane().add(Button1);
+		JButton Back = new JButton("Back");
+		Back.setActionCommand("2");
+		Back.addActionListener(subm);
+		this.add(Back);
 		this.setVisible(true);
 	}
 
@@ -197,33 +200,6 @@ public class SignUPWindow extends JFrame {
 		return (String) TypeList.getSelectedItem();
 	}
 
-	public class MyJcomboboxListener extends JFrame implements ActionListener {
-		private JComboBox<String> TypeList;
-
-		MyJcomboboxListener(JComboBox<String> TypeList) {
-			this.TypeList = TypeList;
-		}
-
-		public void actionPerformed(ActionEvent a) {
-			String s = (String) TypeList.getSelectedItem();
-
-			switch (s) {
-			case "Student_check":
-				System.out.println("selected Student_check");
-				type = "Student_check";
-				break;
-			case "Interest_check":
-				System.out.println("selected Interest_check");
-				type = "Interest_check";
-				break;
-			case "Saving":
-				System.out.println("selected Saving");
-				type = "Saving";
-				break;
-
-			}
-		}
-	}
 }
 
 class IntTextField extends JTextField {

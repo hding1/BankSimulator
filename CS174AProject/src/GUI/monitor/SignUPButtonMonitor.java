@@ -22,14 +22,16 @@ import javax.swing.JOptionPane;
 //
 
 import GUI.windows.loginWindow;
+import User.Customer;
+import GUI.windows.SelectAccountWindow;
 import GUI.windows.SelectWindow;
 import GUI.windows.SignUPWindow;
 
 import java.sql.*;
 
 public class SignUPButtonMonitor implements ActionListener {
-	private loginWindow loginWindow;
 	private SignUPWindow SignUPWindow;
+	private Customer c;
 
 	final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
@@ -51,48 +53,58 @@ public class SignUPButtonMonitor implements ActionListener {
 	 */
 
 	public void actionPerformed(ActionEvent a) {
-		// TO DO:
-		// INSERT INFORMATION INTO SQL TABLE
-
-		try {
-			// STEP 2: Register JDBC driver
-			Class.forName(JDBC_DRIVER);
-
-			// STEP 3: Open a connection
-			System.out.println("Connecting to a selected database...");
-			conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-			System.out.println("Connected database successfully...");
-
-			// STEP 4: Execute a query
-			System.out.println("Creating statement...");
-			stmt = conn.createStatement();
-
-//		      createTable(conn);
-
-			insertCustomer(conn);
-			if (flag) {
-				insertAccount(conn);
-			}
-		} catch (SQLException se) {
-			// Handle errors for JDBC
-			se.printStackTrace();
-		} catch (Exception ea) {
-			// Handle errors for Class.forName
-			ea.printStackTrace();
-		} finally {
-			// finally block used to close resources
+		int command = Integer.parseInt(a.getActionCommand());
+		switch (command) {
+		case 1:
+			// TO DO:
+			// INSERT INFORMATION INTO SQL TABLE
 			try {
-				if (stmt != null)
-					conn.close();
+				// STEP 2: Register JDBC driver
+				Class.forName(JDBC_DRIVER);
+
+				// STEP 3: Open a connection
+				System.out.println("Connecting to a selected database...");
+				conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+				System.out.println("Connected database successfully...");
+
+				// STEP 4: Execute a query
+				System.out.println("Creating statement...");
+				stmt = conn.createStatement();
+
+//			      createTable(conn);
+
+				insertCustomer(conn);
+				if (flag) {
+					insertAccount(conn);
+				}
 			} catch (SQLException se) {
-			} // do nothing
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
+				// Handle errors for JDBC
 				se.printStackTrace();
-			} // end finally try
+			} catch (Exception ea) {
+				// Handle errors for Class.forName
+				ea.printStackTrace();
+			} finally {
+				// finally block used to close resources
+				try {
+					if (stmt != null)
+						conn.close();
+				} catch (SQLException se) {
+				} // do nothing
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				} // end finally try
+			}
+			break;
+		case 2:
+			loginWindow lw = new loginWindow();
+			lw.launchLoginWindow();
+			this.SignUPWindow.setVisible(false);
+			break;
 		}
+		
 
 	}
 
@@ -138,10 +150,12 @@ public class SignUPButtonMonitor implements ActionListener {
 
 	public void insertAccount(Connection conn) throws Exception {
 		String new_id = this.SignUPWindow.getUserID();
-
 		String new_branch = this.SignUPWindow.getBranch();
 		float initialAmount = this.SignUPWindow.getAmount();
 		String type1 = this.SignUPWindow.getAccountType();
+		String new_pin = String.valueOf(this.SignUPWindow.getPIN());
+		String new_name = this.SignUPWindow.getPname();
+		String new_address = this.SignUPWindow.getaddress();
 		System.out.print(type1);
 		if (!(initialAmount > 0)) {
 			JOptionPane.showMessageDialog(this.SignUPWindow, "You must have a positive initial deposit.",
@@ -167,8 +181,8 @@ public class SignUPButtonMonitor implements ActionListener {
 								.prepareStatement("INSERT INTO Student_Checking (Aid) VALUES ('" + account_id + "')");
 						insert.executeUpdate();
 						System.out.println("Insert Student_Checking completed!");
-
-						SelectWindow lw = new SelectWindow();
+						c = new Customer(new_name,new_id,new_address,new_pin);
+						SelectAccountWindow lw = new SelectAccountWindow(c);
 						lw.launchSelectwindow();
 						unique = false;
 						this.SignUPWindow.setVisible(false);
@@ -198,7 +212,8 @@ public class SignUPButtonMonitor implements ActionListener {
 						insert.executeUpdate();
 						System.out.println("Insert completed!");
 						unique = false;
-						SelectWindow lw = new SelectWindow();
+						c = new Customer(new_name,new_id,new_address,new_pin);
+						SelectAccountWindow lw = new SelectAccountWindow(c);
 						lw.launchSelectwindow();
 						this.SignUPWindow.setVisible(false);
 					} catch (Exception e) {
@@ -225,8 +240,9 @@ public class SignUPButtonMonitor implements ActionListener {
 								"INSERT INTO Saving (Aid,Interest_rate) VALUES ('" + account_id + "'," + 7.5 + ")");
 						insert.executeUpdate();
 						System.out.println("Insert completed!");
-
-						SelectWindow lw = new SelectWindow();
+						
+						c = new Customer(new_name,new_id,new_address,new_pin);
+						SelectAccountWindow lw = new SelectAccountWindow(c);
 						lw.launchSelectwindow();
 						unique = false;
 						this.SignUPWindow.setVisible(false);

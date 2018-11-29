@@ -13,9 +13,11 @@ import javax.swing.JOptionPane;
 
 
 import GUI.windows.loginWindow;
+import User.Customer;
 import GUI.windows.SelectWindow;
 import GUI.windows.SignUPWindow;
 import GUI.windows.BankTellerWindow;
+import GUI.windows.SelectAccountWindow;
 
 import java.sql.*;
 
@@ -79,19 +81,26 @@ public class LoginButtonMonitor implements ActionListener {
 			      stmt = conn.createStatement();
 
 			      //String sql = "SELECT cid, cname, city, discount FROM cs174.Customers";
-			      String sql = "SELECT Aid FROM Account";
+			      String sql = "SELECT * FROM Customer C Where C.TaxID = "+this.loginWindow.getUserid().getText();
 			      ResultSet rs = stmt.executeQuery(sql);
-			      
-			      while(rs.next()) {
-			    	  String cid = rs.getString("Aid");
-			    	  if(new String(cid).equals(this.loginWindow.getUserid().getText())) {
-			    			this.loginWindow.setVisible(false);
-			    			SelectWindow selectwindow=new SelectWindow();
+			      if(rs.next()){
+			      if(rs==null) {
+			    	  JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
+			      }else {
+			    	  String pin = rs.getString("PIN");
+			    	  if(pin.equals(this.loginWindow.getPassword().getText())) {
+			    		  	Customer c = new Customer(rs.getString("Name"),rs.getString("TaxID"),rs.getString("Address"),rs.getString("PIN"));
+			    			SelectAccountWindow selectwindow=new SelectAccountWindow(c);
 			    			selectwindow.launchSelectwindow();
-			    			return;
+			    			this.loginWindow.setVisible(false);
+			    	  }else {
+			    		  JOptionPane.showMessageDialog(null, "Incorrect Password!", "Incorrect Password!", JOptionPane.PLAIN_MESSAGE);
 			    	  }
 			      }
-			      JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
+			      }
+			      else {
+			    	  JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
+			      }
 			      rs.close();
 			}catch(SQLException se){
 			      //Handle errors for JDBC
