@@ -77,7 +77,7 @@ public class SignUPWindow extends JFrame{
 		
 		JLabel TypeName = new JLabel("Select your account type below ");
 		this.add(TypeName);
-		String[] TypeString = { "Student_check", "Interest_check", "Saving", "Pocket"};
+		String[] TypeString = { "Student_check", "Interest_check", "Saving", };
 		final JComboBox<String> TypeList = new JComboBox<>(TypeString);
 		this.getContentPane().add(TypeList);
 		TypeList.addActionListener(new MyJcomboboxListener(this, TypeList));
@@ -229,18 +229,6 @@ public class SignUPWindow extends JFrame{
         			}
         			break;
         			
-        		case "Pocket":
-        			try {
-        				PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Pin, PrimaryOwner, Amount, Branch, Open) VALUES ('" + new_id + "', '" + new_pin + "', '" + new_name + "', '" + initialAmount + "', '" + new_branch + "', '" + initialStatus + "')");
-        		
-        				insert.executeUpdate();
-        				System.out.println("Insert completed!");
-        		
-        			} catch(Exception e) {System.out.println(e);}
-        			finally {
-        				System.out.println("funcion completed!");
-        			}
-        			break;
         	}
         	
         }
@@ -272,22 +260,7 @@ public class SignUPWindow extends JFrame{
 					System.out.println("selected Saving");
 					type = "Saving";
 					break;
-				case "Pocket":
-					System.out.println("selected Pocket");
-					type = "Pocket";
-					JLabel LinkedID = new JLabel("Your Linked Account ID:         ");
-					this.suw.add(LinkedID);
-					JButton Button1 = new JButton("aaaaa");
-					Button1.setActionCommand("1");
-					Button1.setAlignmentX(Component.CENTER_ALIGNMENT);
-					Button1.setHorizontalAlignment(SwingConstants.CENTER);
-					Button1.setMinimumSize(new Dimension(100,20));
-					Button1.setMaximumSize(new Dimension(150,30));
-					this.getContentPane().add(Button1);
-					
 
-					
-					break;
 
 				}
         	}
