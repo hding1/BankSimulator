@@ -25,7 +25,7 @@ public class BankTellerWindow extends JFrame{
 		Button1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		Button1.setHorizontalAlignment(SwingConstants.CENTER);
 		Button1.setMinimumSize(new Dimension(100,20));
-		//Button1.setMaximumSize(new Dimension(150,30));
+		Button1.setMaximumSize(new Dimension(150,30));
 		Button1.addActionListener(sbm);
 		this.getContentPane().add(Button1);
 		JButton Button2 = new JButton("Generate Monthly Statement");

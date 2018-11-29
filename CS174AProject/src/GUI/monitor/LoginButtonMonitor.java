@@ -43,7 +43,6 @@ public class LoginButtonMonitor implements ActionListener {
 	//@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(this.loginWindow.getUserid().getText() + " " + String.valueOf(this.loginWindow.getPassword().getPassword()));
 		
 		
 		if(new String(this.loginWindow.getUserid().getText()).equals("0000000000") && new String(String.valueOf(this.loginWindow.getPassword().getPassword())).equals("1234")) {
@@ -54,67 +53,67 @@ public class LoginButtonMonitor implements ActionListener {
 		}
 		else {
 		
-		Connection conn = null;
-		Statement stmt = null;
+			Connection conn = null;
+			Statement stmt = null;
 		
-		if(new String("").equals(this.loginWindow.getUserid().getText())) {
-			JOptionPane.showMessageDialog(null, "TIN Field is blank!", "", JOptionPane.PLAIN_MESSAGE);
-			return;
-		}
+			if(new String("").equals(this.loginWindow.getUserid().getText())) {
+				JOptionPane.showMessageDialog(null, "TIN Field is blank!", "", JOptionPane.PLAIN_MESSAGE);
+				return;
+			}
 		
-		try{
-		      //STEP 2: Register JDBC driver
-		      Class.forName(JDBC_DRIVER);
-
-		      //STEP 3: Open a connection
-		      System.out.println("Connecting to a selected database...");
-		      conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-		      System.out.println("Connected database successfully...");
-		      
-		      //STEP 4: Execute a query
-		      System.out.println("Creating statement...");
-		      stmt = conn.createStatement();
-
-		      //String sql = "SELECT cid, cname, city, discount FROM cs174.Customers";
-		      String sql = "SELECT Aid FROM Account";
-		      ResultSet rs = stmt.executeQuery(sql);
-		      
-		      while(rs.next()) {
-		    	  String cid = rs.getString("Aid");
-		    	  if(new String(cid).equals(this.loginWindow.getUserid().getText())) {
-		    			this.loginWindow.setVisible(false);
+			try{
+				//STEP 2: Register JDBC driver
+				Class.forName(JDBC_DRIVER);
+				
+				//STEP 3: Open a connection
+				System.out.println("Connecting to a selected database...");
+				conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+				System.out.println("Connected database successfully...");
+				
+				//STEP 4: Execute a query
+				System.out.println("Creating statement...");
+				stmt = conn.createStatement();
+				
+				//String sql = "SELECT cid, cname, city, discount FROM cs174.Customers";
+				String sql = "SELECT Aid FROM Account";
+				ResultSet rs = stmt.executeQuery(sql);
+				
+				while(rs.next()) {
+					String cid = rs.getString("Aid");
+					if(new String(cid).equals(this.loginWindow.getUserid().getText())) {
+						this.loginWindow.setVisible(false);
 		    			SelectWindow selectwindow=new SelectWindow();
 		    			selectwindow.launchSelectwindow();
 		    			return;
-		    	  }
-		      }
-		      JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
-		      rs.close();
-		}catch(SQLException se){
-		      //Handle errors for JDBC
-		      se.printStackTrace();
-		}catch(Exception ea){
-		      //Handle errors for Class.forName
-		      ea.printStackTrace();
-		}finally{
-		      //finally block used to close resources
-			try{
-		         if(stmt!=null)
-		            conn.close();
-		    }catch(SQLException se){
-		    }// do nothing
-		    try{
-		         if(conn!=null)
-		            conn.close();
-		    }catch(SQLException se){
-		         se.printStackTrace();
-		    }//end finally try
-		}
+					}
+				}
+				JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
+				rs.close();
+			}catch(SQLException se){
+				//Handle errors for JDBC
+				se.printStackTrace();
+			}catch(Exception ea){
+				//Handle errors for Class.forName
+				ea.printStackTrace();
+			}finally{
+				//finally block used to close resources
+				try{
+					if(stmt!=null)
+						conn.close();
+				}catch(SQLException se){
+				}// do nothing
+				try{
+					if(conn!=null)
+						conn.close();
+				}catch(SQLException se){
+					se.printStackTrace();
+				}//end finally try
+			}
 		
-		//this.loginWindow.setVisible(false);
-		//SelectWindow selectwindow=new SelectWindow();
-		//selectwindow.launchSelectwindow();
-		// TODO prompt next window
+			//this.loginWindow.setVisible(false);
+			//SelectWindow selectwindow=new SelectWindow();
+			//selectwindow.launchSelectwindow();
+			// TODO prompt next window
 		
 //		if(validate()){
 //
@@ -124,7 +123,7 @@ public class LoginButtonMonitor implements ActionListener {
 //			loginWindow lw1 = new loginWindow();
 //			lw1.launchLoginWindow();
 //		}
-	}
+		}
 	}
 	public int	validate(){
 		String userid = this.loginWindow.getUserid().getText();

@@ -2,6 +2,7 @@ package GUI.windows;
 
 import java.awt.BorderLayout;
 
+
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -17,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
 
 import java.sql.*;
 
@@ -28,6 +30,7 @@ public class SignUPWindow extends JFrame{
 	private JPasswordField password;	
 	private JTextField pname;
 	private JTextField bname;
+	private String type;
 
 	
 
@@ -70,7 +73,15 @@ public class SignUPWindow extends JFrame{
 		this.bname.setPreferredSize(dim);
 		this.add(branchName);
 		this.add(this.bname);
-
+		
+		
+		JLabel TypeName = new JLabel("Select your account type below ");
+		this.add(TypeName);
+		String[] TypeString = { "Student_check", "Interest_check", "Saving", "Pocket"};
+		final JComboBox<String> TypeList = new JComboBox<>(TypeString);
+		this.getContentPane().add(TypeList);
+		TypeList.addActionListener(new MyJcomboboxListener(this, TypeList));
+		
 		JButton Button1 = new JButton("Register");
 		Button1.setActionCommand("1");
 		Button1.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -79,7 +90,6 @@ public class SignUPWindow extends JFrame{
 		Button1.setMaximumSize(new Dimension(150,30));
 		Button1.addActionListener(new MyButton1Listener(this) );
 		this.getContentPane().add(Button1);
-
 
 		
 		
@@ -106,7 +116,7 @@ public class SignUPWindow extends JFrame{
 	
         public void actionPerformed(ActionEvent a){
         	
-
+        	System.out.println(this.supw.type);
         	
         	//TO DO:
         	//INSERT INFORMATION INTO SQL TABLE
@@ -176,18 +186,113 @@ public class SignUPWindow extends JFrame{
         	String new_branch = this.supw.bname.getText();
         	String initialAmount = "0";
         	String initialStatus = "1";
-        	try {
-        		PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Pin, PrimaryOwner, Amount, Branch, Open) VALUES ('" + new_id + "', '" + new_pin + "', '" + new_name + "', '" + initialAmount + "', '" + new_branch + "', '" + initialStatus + "')");
+        	String type1 = this.supw.type;
+        	
+        	switch(type1) {
+        	
+        		case "Student_check":
+        			try {
+        				PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Pin, PrimaryOwner, Amount, Branch, Open) VALUES ('" + new_id + "', '" + new_pin + "', '" + new_name + "', '" + initialAmount + "', '" + new_branch + "', '" + initialStatus + "')");
         		
-        		insert.executeUpdate();
-        		System.out.println("Insert completed!");
+        				insert.executeUpdate();
+        				System.out.println("Insert completed!");
         		
-        	} catch(Exception e) {System.out.println(e);}
-        	finally {
-        		System.out.println("funcion completed!");
+        			} catch(Exception e) {System.out.println(e);}
+        			finally {
+        				System.out.println("funcion completed!");
+        			}
+        			break;
+        			
+        		case "Interest_check":
+        			try {
+        				PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Pin, PrimaryOwner, Amount, Branch, Open) VALUES ('" + new_id + "', '" + new_pin + "', '" + new_name + "', '" + initialAmount + "', '" + new_branch + "', '" + initialStatus + "')");
+        		
+        				insert.executeUpdate();
+        				System.out.println("Insert completed!");
+        		
+        			} catch(Exception e) {System.out.println(e);}
+        			finally {
+        				System.out.println("funcion completed!");
+        			}
+        			break;
+        			
+        		case "Saving":
+        			try {
+        				PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Pin, PrimaryOwner, Amount, Branch, Open) VALUES ('" + new_id + "', '" + new_pin + "', '" + new_name + "', '" + initialAmount + "', '" + new_branch + "', '" + initialStatus + "')");
+        		
+        				insert.executeUpdate();
+        				System.out.println("Insert completed!");
+        		
+        			} catch(Exception e) {System.out.println(e);}
+        			finally {
+        				System.out.println("funcion completed!");
+        			}
+        			break;
+        			
+        		case "Pocket":
+        			try {
+        				PreparedStatement insert = conn.prepareStatement("INSERT INTO Account (Aid, Pin, PrimaryOwner, Amount, Branch, Open) VALUES ('" + new_id + "', '" + new_pin + "', '" + new_name + "', '" + initialAmount + "', '" + new_branch + "', '" + initialStatus + "')");
+        		
+        				insert.executeUpdate();
+        				System.out.println("Insert completed!");
+        		
+        			} catch(Exception e) {System.out.println(e);}
+        			finally {
+        				System.out.println("funcion completed!");
+        			}
+        			break;
         	}
+        	
         }
 	}
+        
+        public class MyJcomboboxListener extends JFrame implements ActionListener {
+        	private SignUPWindow suw;
+        	private JComboBox<String> TypeList;
+        	
+        	MyJcomboboxListener(SignUPWindow suw, JComboBox<String> TypeList){
+        		this.suw = suw;
+        		this.TypeList = TypeList;
+        	}
+        	
+        	
+        	public void actionPerformed(ActionEvent a){  
+				String s = (String) TypeList.getSelectedItem();
+
+				switch (s) {
+				case "Student_check":
+					System.out.println("selected Student_check");
+					type = "Student_check";
+					break;
+				case "Interest_check":
+					System.out.println("selected Interest_check");
+					type = "Interest_check";
+					break;
+				case "Saving":
+					System.out.println("selected Saving");
+					type = "Saving";
+					break;
+				case "Pocket":
+					System.out.println("selected Pocket");
+					type = "Pocket";
+					JLabel LinkedID = new JLabel("Your Linked Account ID:         ");
+					this.suw.add(LinkedID);
+					JButton Button1 = new JButton("aaaaa");
+					Button1.setActionCommand("1");
+					Button1.setAlignmentX(Component.CENTER_ALIGNMENT);
+					Button1.setHorizontalAlignment(SwingConstants.CENTER);
+					Button1.setMinimumSize(new Dimension(100,20));
+					Button1.setMaximumSize(new Dimension(150,30));
+					this.getContentPane().add(Button1);
+					
+
+					
+					break;
+
+				}
+        	}
+        }
+	
 	
 	
 	
