@@ -35,8 +35,8 @@ import GUI.monitor.SelectMonitor;
 import GUI.monitor.SignUPButtonMonitor;
 
 public class SignUPWindow extends JFrame{
-	private JTextField userid;
-	private IntTextField password;	
+	private IntTextField userid;
+	private IntPasswordField password;	
 	private JTextField pname;
 	private JTextField address;
 	private JTextField branch;
@@ -66,13 +66,13 @@ public class SignUPWindow extends JFrame{
 		
 		Dimension dim = new Dimension(120, 20);
 		//Tax ID
-		this.userid = new JTextField();
+		this.userid = new IntTextField();
 		this.userid.setPreferredSize(dim);
 		this.add(userLabel);
 		this.add(this.userid);
 		
 		//PIN
-		this.password = new IntTextField();
+		this.password = new IntPasswordField();
 		this.password.setPreferredSize(dim);
 		password.addKeyListener(new java.awt.event.KeyAdapter() {
 		    public void keyTyped(java.awt.event.KeyEvent e) { 
@@ -104,7 +104,6 @@ public class SignUPWindow extends JFrame{
 		
 		//amount
 		this.amount = new JFormattedTextField();
-		amount.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
 		amount.getDocument().addDocumentListener(new DocumentListener() {
 		    @Override
 		    public void insertUpdate(DocumentEvent e) {
@@ -211,7 +210,7 @@ public class SignUPWindow extends JFrame{
     }
 }
 
-class IntTextField extends JPasswordField {
+class IntTextField extends JTextField {
 	  public IntTextField() {
 	    super();
 	  }
@@ -252,3 +251,45 @@ class IntTextField extends JPasswordField {
 	    }
 	  }
 }
+	  class IntPasswordField extends JPasswordField {
+		  public IntPasswordField() {
+		    super();
+		  }
+
+		  protected Document createDefaultModel() {
+		    return new IntTextDocument();
+		  }
+
+//		  public boolean isValid() {
+//		    try {
+//		      Integer.parseInt(this.getText());
+//		      return true;
+//		    } catch (NumberFormatException e) {
+//		      return false;
+//		    }
+//		  }
+
+		  public int getValue() {
+		    try {
+		      return Integer.parseInt(getText());
+		    } catch (NumberFormatException e) {
+		      return 0;
+		    }
+		  }
+		  class IntTextDocument extends PlainDocument {
+		    public void insertString(int offs, String str, AttributeSet a)
+		        throws BadLocationException {
+		      if (str == null)
+		        return;
+		      String oldString = getText(0, getLength());
+		      String newString = oldString.substring(0, offs) + str
+		          + oldString.substring(offs);
+		      try {
+		        Integer.parseInt(newString + "0");
+		        super.insertString(offs, str, a);
+		      } catch (NumberFormatException e) {
+		      }
+		    }
+		  }
+	  }
+
