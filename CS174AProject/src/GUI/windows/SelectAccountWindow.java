@@ -41,20 +41,20 @@ public class SelectAccountWindow extends JFrame {
 		
 		//Labels
 		JLabel userLabel = new JLabel("Select an Account Below");
-		JLabel space = new JLabel("");
-		JLabel accountLabel = new JLabel("Account ID                      Balance");
-		userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		space.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JLabel accountLabel = new JLabel("Account ID                 Balance");
+		JLabel balanceLabel = new JLabel("Balance");
+		
 		accountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+		userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
 		this.add(userLabel);
-		this.add(space);
 		this.add(accountLabel);
+//		this.add(balanceLabel);
 		
 		//List
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		for(int i = 0;i<c.getList().size();i++) {
-			listModel.addElement(c.getList().get(i));
+			listModel.addElement("    "+ c.getList().get(i).getAccount()+String.format("%22.2f", c.getList().get(i).getAmount()));
 		}
 		AccountList = new JList<>(listModel);
 		AccountList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

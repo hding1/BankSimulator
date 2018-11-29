@@ -1,12 +1,18 @@
 package User;
 
 public class Student_check_account extends Account{
-
-	Student_check_account(){
-		super();
+	private float Interest_rate;
+	
+	Student_check_account(String Account_id, String TaxID, float Amount, String Branch, char status, float ir){
+		super(Account_id, TaxID, Amount, Branch,status);
+		Interest_rate = ir;
 	}
 	
-	Student_check_account(String Account_id, String TaxID, float Amount, String Branch, char branch,  String ir){
-		super(Account_id, TaxID, Amount, Branch,branch);
+	public float getIntere_rate() {
+		return this.Interest_rate;
+	}
+	
+	public void changeIR(float ir) {
+		Interest_rate = ir;
 	}
 }

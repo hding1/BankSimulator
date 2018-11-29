@@ -83,14 +83,15 @@ public class LoginButtonMonitor implements ActionListener {
 			      //String sql = "SELECT cid, cname, city, discount FROM cs174.Customers";
 			      String sql = "SELECT * FROM Customer C Where C.TaxID = "+this.loginWindow.getUserid().getText();
 			      ResultSet rs = stmt.executeQuery(sql);
-			      if(rs.next()){
+			      while(rs.next()){
 			      if(rs==null) {
 			    	  JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
 			      }else {
 			    	  String pin = rs.getString("PIN");
 			    	  if(pin.equals(this.loginWindow.getPassword().getText())) {
 			    		  	Customer c = new Customer(rs.getString("Name"),rs.getString("TaxID"),rs.getString("Address"),rs.getString("PIN"));
-			    			SelectAccountWindow selectwindow=new SelectAccountWindow(c);
+			    			System.out.println(c.getList().size());
+			    		  	SelectAccountWindow selectwindow=new SelectAccountWindow(c);
 			    			selectwindow.launchSelectwindow();
 			    			this.loginWindow.setVisible(false);
 			    	  }else {
@@ -98,9 +99,7 @@ public class LoginButtonMonitor implements ActionListener {
 			    	  }
 			      }
 			      }
-			      else {
-			    	  JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
-			      }
+
 			      rs.close();
 			}catch(SQLException se){
 			      //Handle errors for JDBC

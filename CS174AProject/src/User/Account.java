@@ -15,15 +15,15 @@ public abstract class Account {
 		this.Status = '1';
 	}
 	
-	Account(String Account_id, String TaxID, float Amount, String Branch, char branch){
+	Account(String Account_id, String TaxID, float Amount, String Branch, char status){
 		this.Amount = Amount;
 		this.Account_id = Account_id;
 		this.Pname = Pname;
 		this.Branch = Branch;
-		this.Status = '1';
+		this.Status = status;
 	}
 	
-	public double getAmount() {
+	public float getAmount() {
 		return this.Amount;
 	} 
 	

@@ -2,17 +2,19 @@ package User;
 
 public class Interest_check_account extends Account{
 
-	private final double Interest_rate = 0.055;
+	private float Interest_rate;
 	
-	Interest_check_account(){
-		super();
+	
+	Interest_check_account(String Account_id, String TaxID, float Amount, String Branch, char status, float ir){
+		super(Account_id, TaxID, Amount, Branch, status);
+		Interest_rate = ir;
 	}
 	
-	Interest_check_account(String Account_id, String TaxID, float Amount, String Branch, char branch){
-		super(Account_id, TaxID, Amount, Branch, branch);
-	}
-	
-	public double getInterest_rate() {
+	public float getInterest_rate() {
 		return this.Interest_rate;
+	}
+	
+	public void changeIR(float ir) {
+		Interest_rate = ir;
 	}
 }
