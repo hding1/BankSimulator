@@ -1,0 +1,286 @@
+package GUI.windows;
+
+import java.awt.BorderLayout;
+
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
+import javax.swing.BoxLayout;
+
+import java.awt.event.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
+
+import java.sql.*;
+
+import GUI.monitor.SelectMonitor;
+import GUI.monitor.SignUPButtonMonitor;
+
+public class SignUPWindow extends JFrame{
+	private JTextField userid;
+	private JPasswordField password;	
+	private JTextField pname;
+	private JTextField address;
+	private JTextField branch;
+	private String type;
+	private IntTextField amount;
+	public JLabel typeName = new JLabel("Type:         ");
+
+
+	public void launchSignUPWindow(){
+//		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
+		this.setLayout(new FlowLayout());
+		this.setTitle("Sign Up");
+		this.setSize(240,240);
+		this.setResizable(false);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		SignUPButtonMonitor subm = new SignUPButtonMonitor(this);
+		
+		JLabel userLabel = new JLabel("Tax ID:          ");
+		JLabel pwdLabel = new JLabel("PIN:               ");
+		JLabel userName = new JLabel("Your Name:   ");
+		JLabel addressName = new JLabel("Address:       ");
+		JLabel branchName = new JLabel("Branch:         ");
+		JLabel depositAmount = new JLabel("Amount:     ");
+		
+		Dimension dim = new Dimension(120, 20);
+		//Tax ID
+		this.userid = new JTextField();
+		this.userid.setPreferredSize(dim);
+		this.add(userLabel);
+		this.add(this.userid);
+		
+		//PIN
+		this.password = new JPasswordField();
+		this.password.setPreferredSize(dim);
+		password.addKeyListener(new java.awt.event.KeyAdapter() {
+		    public void keyTyped(java.awt.event.KeyEvent e) { 
+		        if (password.getText().length() >= 4 ) 
+		            e.consume(); 
+		    }  
+		});
+		this.add(pwdLabel);
+		this.add(this.password);
+		
+		//Name
+		this.pname = new JTextField();
+		this.pname.setPreferredSize(dim);
+		this.add(userName);
+		this.add(this.pname);
+		
+		//address
+		this.address = new JTextField();
+		this.address.setPreferredSize(dim);
+		this.add(addressName);
+		this.add(this.address);
+		
+		//branch
+		this.branch = new JTextField();
+		this.branch.setPreferredSize(dim);
+		this.add(branchName);
+		this.add(this.branch);
+		
+		//amount
+		this.amount = new IntTextField(1,10);
+		this.amount.setPreferredSize(dim);
+		this.add(depositAmount);
+		this.add(this.amount);
+		
+		//Type
+		String[] TypeString = { "Student_check", "Interest_check", "Saving"};
+		final JComboBox<String> TypeList = new JComboBox<>(TypeString);
+		TypeList.setPreferredSize(dim);
+		this.add(typeName);
+		this.getContentPane().add(TypeList);
+		
+		//Register Button
+		JButton Button1 = new JButton("Register");
+		Button1.setActionCommand("1");
+		Button1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		Button1.setHorizontalAlignment(SwingConstants.CENTER);
+		Button1.setMinimumSize(new Dimension(100,20));
+		Button1.setMaximumSize(new Dimension(150,30));
+		Button1.addActionListener(subm);
+		this.getContentPane().add(Button1);
+
+
+		this.setVisible(true);
+	}
+	public String getUserID() {
+		return this.userid.getText();
+	}
+	public String getPIN() {
+		return this.password.getText();
+	}
+	public String getPname() {
+		return this.pname.getText();
+	}
+	public String getaddress() {
+		return this.address.getText();
+	}
+	
+//	public void insertUpdate(DocumentEvent e) {
+//	    setLabel();
+//	  }
+//
+//	  public void removeUpdate(DocumentEvent e) {
+//	    setLabel();
+//	  }
+//
+//	  public void changedUpdate(DocumentEvent e) {
+//	  }
+//
+//	  public void setLabel() {
+//	    if (amount.isValid() ) {
+//	      int value = amount.getValue();
+//	      typeName.setText(Integer.toString(value));
+//	    }
+//	  }
+//	public class MyButton1Listener implements ActionListener{
+//		SignUPWindow supw;
+//		
+//    	final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+//    	final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
+//
+//    	final String USERNAME = "fliang";
+//    	final String PASSWORD = "123455";
+//    	
+//		Connection conn = null;
+//		Statement stmt = null;
+//		
+//		
+//		MyButton1Listener(SignUPWindow supw){
+//			this.supw = supw;
+//		}
+//	
+//        public void actionPerformed(ActionEvent a){ 	
+//        	//TO DO:
+//        	//INSERT INFORMATION INTO SQL TABLE
+//        	
+//        	try{
+//  		      //STEP 2: Register JDBC driver
+//  		      Class.forName(JDBC_DRIVER);
+//
+//  		      //STEP 3: Open a connection
+//  		      System.out.println("Connecting to a selected database...");
+//  		      conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+//  		      System.out.println("Connected database successfully...");
+//  		      
+//  		      //STEP 4: Execute a query
+//  		      System.out.println("Creating statement...");
+//  		      stmt = conn.createStatement();
+//  		      
+//  		      createTable(conn);
+//  		      insert(conn);
+//
+//  		}catch(SQLException se){
+//  		      //Handle errors for JDBC
+//  		      se.printStackTrace();
+//  		}catch(Exception ea){
+//  		      //Handle errors for Class.forName
+//  		      ea.printStackTrace();
+//  		}finally{
+//  		      //finally block used to close resources
+//  			try{
+//  		         if(stmt!=null)
+//  		            conn.close();
+//  		    }catch(SQLException se){
+//  		    }// do nothing
+//  		    try{
+//  		         if(conn!=null)
+//  		            conn.close();
+//  		    }catch(SQLException se){
+//  		         se.printStackTrace();
+//  		    }//end finally try
+//  		}
+//        	this.supw.setVisible(false);
+//			loginWindow lw = new loginWindow();
+//			lw.launchLoginWindow();
+//        }
+//	
+//	
+//        public void createTable(Connection conn) throws Exception {
+//        	try {
+//        		PreparedStatement create = conn.prepareStatement(
+//        				"CREATE TABLE IF NOT EXIST Customer(Name CHAR[10], TaxID CHAR[10], Address CHAR[100], Address CHAR[100],PIN CHAR[4], PRIMARY KEY(TaxID))");
+//        		create.executeUpdate();	
+//        		System.out.println("Table Created");
+//        	}catch(Exception e){
+//        		System.out.println(e);
+//        	}finally {
+//        		System.out.println("Function completed");
+//        	}
+//        }
+//        
+//        public void insert(Connection conn) throws Exception {
+//        	String new_id = this.supw.userid.getText();
+//        	String new_pin = String.valueOf(this.supw.password.getPassword());
+//        	String new_name = this.supw.pname.getText();
+//        	String new_address = this.supw.address.getText();
+//        	try {
+//        		PreparedStatement insert = conn.prepareStatement("INSERT INTO Customer (Name, TaxID, Address, PIN) VALUES ('"+new_name+"', '"+ new_id+"','"+ new_address+ "','"+ new_pin+")");
+//        		insert.executeUpdate();
+//        	} catch(Exception e) {System.out.println(e);}
+//        	finally {
+//        		System.out.println("insert completed!");
+//        	}
+//        }
+//	}
+	
+}
+class IntTextField extends JTextField {
+	  public IntTextField(int defval, int size) {
+	    super("" + defval, size);
+	  }
+
+	  protected Document createDefaultModel() {
+	    return new IntTextDocument();
+	  }
+
+//	  public boolean isValid() {
+//	    try {
+//	      Integer.parseInt(this.getText());
+//	      return true;
+//	    } catch (NumberFormatException e) {
+//	      return false;
+//	    }
+//	  }
+
+	  public int getValue() {
+	    try {
+	      return Integer.parseInt(getText());
+	    } catch (NumberFormatException e) {
+	      return 0;
+	    }
+	  }
+	  class IntTextDocument extends PlainDocument {
+	    public void insertString(int offs, String str, AttributeSet a)
+	        throws BadLocationException {
+	      if (str == null)
+	        return;
+	      String oldString = getText(0, getLength());
+	      String newString = oldString.substring(0, offs) + str
+	          + oldString.substring(offs);
+	      try {
+	        Integer.parseInt(newString + "0");
+	        super.insertString(offs, str, a);
+	      } catch (NumberFormatException e) {
+	      }
+	    }
+	  }
+}

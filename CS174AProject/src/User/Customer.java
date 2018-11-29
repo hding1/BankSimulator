@@ -4,7 +4,8 @@ public class Customer {
 	
 	private String Name;
 	private double TaxID;
-	private String Address; 
+	private String Address;
+	private String Pin;
 	
 	Customer(){
 		this.Name = "";
@@ -12,10 +13,11 @@ public class Customer {
 		this.Address = "";
 	}
 	
-	Customer(String Name, double TaxID, String Address){
+	Customer(String Name, double TaxID, String Address, String Pin){
 		this.Name = Name;
 		this.TaxID = TaxID;
 		this.Address = Address;
+		this.Pin = Pin;
 	}
 	
 	public String getName() {

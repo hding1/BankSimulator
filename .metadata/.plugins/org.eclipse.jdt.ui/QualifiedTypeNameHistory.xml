@@ -2,4 +2,5 @@
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="javax.swing.text.AttributeSet"/>
     <fullyQualifiedTypeName name="javax.print.attribute.AttributeSet"/>
+    <fullyQualifiedTypeName name="java.awt.FlowLayout"/>
 </qualifiedTypeNameHistroy>

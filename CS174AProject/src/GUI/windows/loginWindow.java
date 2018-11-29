@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import GUI.monitor.LoginButtonMonitor;
-import GUI.monitor.SignUPButtonMonitor;
 
 public class loginWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -56,9 +55,8 @@ public class loginWindow extends JFrame {
 		this.add(loginButton);
 		
 		JButton SignUP = new JButton("Sign up");
-		SignUPButtonMonitor subm = new SignUPButtonMonitor(this);
-		SignUP.setActionCommand("1");
-		SignUP.addActionListener(subm);
+		SignUP.setActionCommand("2");
+		SignUP.addActionListener(lbm);
 		this.add(SignUP);
 		
 		
