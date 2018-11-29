@@ -8,8 +8,8 @@ public class Interest_check_account extends Account{
 		super();
 	}
 	
-	Interest_check_account(double Amount, int Account_id, String Pname, String Branch){
-		super(Amount, Account_id, Pname, Branch);
+	Interest_check_account(String Account_id, String TaxID, float Amount, String Branch, char branch){
+		super(Account_id, TaxID, Amount, Branch, branch);
 	}
 	
 	public double getInterest_rate() {

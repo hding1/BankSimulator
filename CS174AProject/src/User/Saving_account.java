@@ -2,18 +2,23 @@ package User;
 
 public class Saving_account extends Account{
 	
-	private final double Interest_rate = 0.075;
+	private float Interest_rate;
 	
 	Saving_account(){
 		super();
 	}
 	
-	Saving_account(double Amount, int Account_id, String Pname, String Branch){
-		super(Amount, Account_id, Pname, Branch);
+	Saving_account(String Account_id, String TaxID, float Amount, String Branch, char branch, float IR){
+		super(Account_id, TaxID, Amount, Branch, branch);
+		Interest_rate = IR;
 	}
 	
-	public double getIntere_rate() {
+	public float getIntere_rate() {
 		return this.Interest_rate;
+	}
+	
+	public void changeIR(float ir) {
+		Interest_rate = ir;
 	}
 	
 }

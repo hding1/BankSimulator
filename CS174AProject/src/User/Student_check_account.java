@@ -6,7 +6,7 @@ public class Student_check_account extends Account{
 		super();
 	}
 	
-	Student_check_account(double Amount, int Account_id, String Pname, String Branch){
-		super(Amount, Account_id, Pname, Branch);
+	Student_check_account(String Account_id, String TaxID, float Amount, String Branch, char branch,  String ir){
+		super(Account_id, TaxID, Amount, Branch,branch);
 	}
 }

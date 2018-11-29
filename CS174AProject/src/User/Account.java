@@ -1,33 +1,33 @@
 package User;
 
 public abstract class Account {
-	protected double Amount;
-	protected int Account_id;
+	protected float Amount;
+	protected String Account_id;
 	protected String Pname;
 	protected String Branch;
-	protected boolean Status;
+	protected char Status;
 	
 	Account(){
-		this.Amount = 0.0;
-		this.Account_id = 0;
+		this.Amount = 0;
+		this.Account_id = "";
 		this.Pname = "";
 		this.Branch = "";
-		this.Status = true;
+		this.Status = '1';
 	}
 	
-	Account(double Amount, int Account_id, String Pname, String Branch){
+	Account(String Account_id, String TaxID, float Amount, String Branch, char branch){
 		this.Amount = Amount;
 		this.Account_id = Account_id;
 		this.Pname = Pname;
 		this.Branch = Branch;
-		this.Status = true;
+		this.Status = '1';
 	}
 	
 	public double getAmount() {
 		return this.Amount;
 	} 
 	
-	public int getAccount() {
+	public String getAccount() {
 		return this.Account_id;
 	}
 	
@@ -39,15 +39,15 @@ public abstract class Account {
 		return this.Branch;
 	}
 	
-	public boolean getStatus() {
+	public char getStatus() {
 		return this.Status;
 	}
 	
-	public void setAmount(double Amount) {
+	public void setAmount(float Amount) {
 		this.Amount = Amount;
 	}
 	
-	public void setAccount(int Account_id) {
+	public void setAccount(String Account_id) {
 		this.Account_id = Account_id;
 	}
 	
@@ -59,7 +59,7 @@ public abstract class Account {
 		this.Branch = Branch;
 	}
 	
-	public void setStatus(boolean Status) {
+	public void setStatus(char Status) {
 		this.Status = Status;
 	}
 }

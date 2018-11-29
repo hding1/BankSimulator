@@ -9,8 +9,8 @@ public class Pocket_account extends Account{
 		this.LinkedAccount_ID = 0;
 	}
 	
-	Pocket_account(double Amount, int Account_id, String Pname, String Branch, int LinkedAccount_ID){
-		super(Amount, Account_id, Pname, Branch);
+	Pocket_account(String Account_id, String TaxID, float Amount, String Branch, char branch, int LinkedAccount_ID){
+		super(Account_id, TaxID, Amount, Branch, branch);
 		this.LinkedAccount_ID = LinkedAccount_ID;
 	}
 	
