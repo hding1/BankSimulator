@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 
+import GUI.monitor.PocketMonitor;
 import GUI.monitor.SelectMonitor;
 import User.Account;
 import User.Customer;
@@ -20,22 +21,22 @@ import User.Customer;
 
 
 
-public class SelectWindow extends JFrame {
+public class PocketWindow extends JFrame {
 	private Customer c;
 	private Account a;
-	public SelectWindow(Customer c, Account a) {
+	public PocketWindow(Customer c, Account a) {
 		super();
 		this.c = c;
 		this.a = a;
 	}
 	public void launchSelectWindow(){
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
-		this.setTitle("Menu");
+		this.setTitle("Pocket Menu");
 		this.setSize(300,180);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-		SelectMonitor sbm = new SelectMonitor(this);
+		PocketMonitor sbm = new PocketMonitor(this);
 		JButton Button1 = new JButton("Account Info");
 		Button1.setActionCommand("1");
 		Button1.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -44,7 +45,7 @@ public class SelectWindow extends JFrame {
 		Button1.setMaximumSize(new Dimension(150,30));
 		Button1.addActionListener(sbm);
 		this.getContentPane().add(Button1);
-		JButton Button2 = new JButton("Deposit");
+		JButton Button2 = new JButton("Top-Up");
 		Button2.setActionCommand("2");
 		Button2.setAlignmentX(Component.CENTER_ALIGNMENT);
 		Button2.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -52,7 +53,7 @@ public class SelectWindow extends JFrame {
 		Button2.setMaximumSize(new Dimension(150,30));
 		Button2.addActionListener(sbm);
 		this.getContentPane().add(Button2);
-		JButton Button3 = new JButton("Withdraw");
+		JButton Button3 = new JButton("Purchase");
 		Button3.setAlignmentX(Component.CENTER_ALIGNMENT);
 		Button3.setAlignmentY(Component.CENTER_ALIGNMENT);
 		Button3.setMinimumSize(new Dimension(100,20));
@@ -60,7 +61,7 @@ public class SelectWindow extends JFrame {
 		Button3.setActionCommand("3");
 		Button3.addActionListener(sbm);
 		this.getContentPane().add(Button3);
-		JButton Button4 = new JButton("Transfer");
+		JButton Button4 = new JButton("Collect");
 		Button4.setAlignmentX(Component.CENTER_ALIGNMENT);
 		Button4.setAlignmentY(Component.CENTER_ALIGNMENT);
 		Button4.setMinimumSize(new Dimension(100,20));
@@ -68,7 +69,7 @@ public class SelectWindow extends JFrame {
 		Button4.setActionCommand("4");
 		Button4.addActionListener(sbm);
 		this.getContentPane().add(Button4);
-		JButton Button5 = new JButton("Wire");
+		JButton Button5 = new JButton("Pay-Friend");
 		Button5.setAlignmentX(Component.CENTER_ALIGNMENT);
 		Button5.setAlignmentY(Component.CENTER_ALIGNMENT);
 		Button5.setMinimumSize(new Dimension(100,20));
