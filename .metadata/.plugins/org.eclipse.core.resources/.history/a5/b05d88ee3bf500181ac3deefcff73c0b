@@ -126,8 +126,8 @@ public class TDMonitor implements ActionListener {
 			    		
 			    		if(total<=0.01) {
 			    			this.td.a.setStatus('0');
-							JOptionPane.showMessageDialog(this.td, "Balance below 0.01\nThe account is closed\n"+typeT.toLowerCase()+" amount:"+this.td.getAmount(),"Account Closed",  JOptionPane.PLAIN_MESSAGE);
-			    			closeAccount(this.td.a.getAccount());
+							JOptionPane.showMessageDialog(this.td, "Balance below 0.01\nThe account is closed"+typeT.toLowerCase()+" amount:"+this.td.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
+			    			closeAccount();
 			    		}
 
 			    	}else {
@@ -233,10 +233,10 @@ public class TDMonitor implements ActionListener {
 
 		return result;
 	}
-	public void closeAccount(String id) {
+	public void closeAccount() {
 		try {
 			PreparedStatement update = conn.prepareStatement(
-					"UPDATE Account SET Open = '0' WHERE Aid = '"+id+"'");
+					"UPDATE Account SET Open = '0' WHERE Aid = '"+this.td.a.getAccount()+"'");
 			update.executeUpdate();
 			System.out.println("Close completed!");
 		} catch (Exception e) {
@@ -285,10 +285,6 @@ public class TDMonitor implements ActionListener {
 			update.executeUpdate();
 			unique = false;
     		flag = true;
-    		if(link_amount<=0.01) {
-    			JOptionPane.showMessageDialog(this.td, "Balance below 0.01\nThe linked account is closed\n"+typeT.toLowerCase()+" amount:"+this.td.getAmount(),"Account closed",  JOptionPane.PLAIN_MESSAGE);
-    			closeAccount(link_aid);
-    		}
 			System.out.println("Transaction completed!");
 			}else {
 				unique = false;

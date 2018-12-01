@@ -118,7 +118,7 @@ public class TWMonitor implements ActionListener {
 			    		updateAmount(total);
 			    		if(total<=0.01) {
 			    			this.tw.a.setStatus('0');
-							JOptionPane.showMessageDialog(this.tw, "Balance below 0.01\nThe account is closed"+typeT.toLowerCase()+" amount:"+this.tw.getAmount(),"Account Closed",  JOptionPane.PLAIN_MESSAGE);
+							JOptionPane.showMessageDialog(this.tw, "Balance below 0.01\nThe account is closed"+typeT.toLowerCase()+" amount:"+this.tw.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
 			    			closeAccount();
 			    		}
 			    		flag = true;

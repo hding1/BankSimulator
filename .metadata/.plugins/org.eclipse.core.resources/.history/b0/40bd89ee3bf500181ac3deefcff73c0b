@@ -98,7 +98,22 @@ public class LoginButtonMonitor implements ActionListener {
 			      }else {
 			    	  JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
 			      }
-
+//			      while(rs.next()){
+//			      if(rs==null) {
+//			    	  JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
+//			      }else {
+//			    	  String pin = rs.getString("PIN");
+//			    	  if(pin.equals(this.loginWindow.getPassword().getText())) {
+//			    		  	Customer c = new Customer(rs.getString("Name"),rs.getString("TaxID"),rs.getString("Address"),rs.getString("PIN"));
+//			    			System.out.println(c.getList().size());
+//			    		  	SelectAccountWindow selectwindow=new SelectAccountWindow(c);
+//			    			selectwindow.launchSelectwindow();
+//			    			this.loginWindow.setVisible(false);
+//			    	  }else {
+//			    		  JOptionPane.showMessageDialog(null, "Incorrect Password!", "Incorrect Password!", JOptionPane.PLAIN_MESSAGE);
+//			    	  }
+//			      }
+//			      }
 
 			      rs.close();
 			}catch(SQLException se){
