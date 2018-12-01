@@ -19,18 +19,20 @@ import GUI.monitor.LoginButtonMonitor;
 import GUI.monitor.TDMonitor;
 import User.Account;
 import User.Customer;
+import User.Pocket_account;
 
 public class TDWindow extends JFrame {
 	private JTextField amount;
 	private JPasswordField password;
 	public Customer c;
 	public Account a;
-	public boolean type;
-	public TDWindow(Customer c, Account a, boolean type) {
+	public Pocket_account p;
+	public int type;
+	public TDWindow(Customer c, Account a, int i) {
 		super();
 		this.c = c;
 		this.a = a;
-		this.type = type;
+		this.type = i;
 	}
 	
 
@@ -40,10 +42,20 @@ public class TDWindow extends JFrame {
 	public void launchWindow(){
 		this.setLayout(new FlowLayout());
 		String title = "";
-		if(type) {
-			title = "Deposit";
-		}else {
-			title = "Withdraw";
+		switch(type) {
+			case 1: title = "Deposit";
+				break;
+			case 2: title = "Withdraw";
+				break;
+			case 3: 
+				title = "Top-Up";
+				break;
+			case 4: 
+				title = "Purchase";
+				break;
+			case 5: 
+				title = "Collect";
+				break;
 		}
 		this.setTitle(title);
 		this.setSize(240,110);

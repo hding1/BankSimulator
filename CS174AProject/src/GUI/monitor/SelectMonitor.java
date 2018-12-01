@@ -38,21 +38,22 @@ public class SelectMonitor  implements ActionListener{
 			break;
 		case 2:
 			this.selectwindow.setVisible(false);
-			window1 = new TDWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),true);
+			window1 = new TDWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),1);
 			window1.launchWindow();
 			break;
 		case 3:
 			this.selectwindow.setVisible(false);
-			window1 = new TDWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),false);
+			window1 = new TDWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),2);
 			window1.launchWindow();
 			break;
 		case 4:
 			this.selectwindow.setVisible(false);
-			window2 = new TWWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),true);
+			window2 = new TWWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),1);
 			window2.launchWindow();
 			break;
         case 5:
-        	window2 = new TWWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),false);
+        	this.selectwindow.setVisible(false);
+        	window2 = new TWWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),2);
 			window2.launchWindow();
 			break;
         case 6:

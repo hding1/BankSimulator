@@ -16,10 +16,12 @@ import javax.swing.JOptionPane;
 
 import GUI.windows.loginWindow;
 import User.Customer;
+import User.Pocket_account;
 import GUI.windows.SelectWindow;
 import GUI.windows.SignUPWindow;
 import GUI.windows.TDWindow;
 import GUI.windows.BankTellerWindow;
+import GUI.windows.PocketWindow;
 import GUI.windows.SelectAccountWindow;
 
 import java.sql.*;
@@ -58,19 +60,32 @@ public class TDMonitor implements ActionListener {
 		case 1:
 			//acount update
 			String typeT = "";
-			if(td.type) {
-				typeT = "Depost";
-			}else {
-				typeT = "Withdraw";
-			}
 			float total = this.td.a.getAmount();
-			if(this.td.type) {
+			switch(td.type) {
+			case 1: 
+				typeT = "Deposit";
 				total = this.td.getAmount()+this.td.a.getAmount();
-			}else {
+				break;
+			case 2: 
+				typeT = "Withdraw";
 				total = this.td.a.getAmount()-this.td.getAmount();
-			}
-			if(total>0.01) {
+				break;
+			case 3: 
+				typeT = "Top-Up";
+				total = this.td.getAmount()+this.td.a.getAmount();
+				break;
+			case 4: 
+				typeT = "Purchase";
+				total = this.td.a.getAmount()-this.td.getAmount();
+				break;
+			case 5: 
+				typeT = "Collect";
+				total = this.td.a.getAmount()-this.td.getAmount()*1.03f;
+				break;
+		}
+			if(total>=0) {
 			this.td.a.setAmount(total);
+			boolean unique = true;
 			try {
 				// STEP 2: Register JDBC driver
 				Class.forName(JDBC_DRIVER);
@@ -87,14 +102,34 @@ public class TDMonitor implements ActionListener {
 //			      createTable(conn);
 				String sql = "SELECT * FROM Customer C Where C.TaxID = "+this.td.c.getTaxID();
 			    ResultSet rs = stmt.executeQuery(sql);
+			    
 			    while(rs.next()){
 			    	String pin = rs.getString("PIN");
 			    	if(pin.equals(this.td.getPIN())) {
-			    		updateAmount(total);
+			    		switch(td.type) {
+						case 1: 
+							updateAmount(total);
+							break;
+						case 2: 
+							updateAmount(total);
+							break;
+						case 3: ;
+							TC(total);
+							break;
+						case 4: 
+							updateAmount(total);
+							break;
+						case 5:
+							TC(total);
+							break;
+					}
+			    		
 			    		if(total<=0.01) {
+			    			this.td.a.setStatus('0');
+							JOptionPane.showMessageDialog(this.td, "Balance below 0.01\nThe account is closed"+typeT.toLowerCase()+" amount:"+this.td.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
 			    			closeAccount();
 			    		}
-			    		flag = true;
+
 			    	}else {
 			    		JOptionPane.showMessageDialog(null, "Incorrect PIN", "Incorrect PIN", JOptionPane.PLAIN_MESSAGE);
 			    	}
@@ -122,26 +157,38 @@ public class TDMonitor implements ActionListener {
 			if(flag) {
 
 				JOptionPane.showMessageDialog(null, typeT+" Succeed\nYour current balance is \n$"+total,"Transaction Successful",  JOptionPane.PLAIN_MESSAGE);
+				if(td.type<3) {
 				this.td.setVisible(false);
 				SelectWindow window = new SelectWindow(this.td.c,this.td.a);
 				window.launchSelectWindow();
+				}else {
+					this.td.setVisible(false);
+					PocketWindow window = new PocketWindow(this.td.c,(Pocket_account)this.td.a);
+					window.launchSelectWindow();
+				}
 			}
-			}else if(total>=0){
-				JOptionPane.showMessageDialog(this.td, "The account is closed"+typeT.toLowerCase()+" amount:"+this.td.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
 			}else {
 				JOptionPane.showMessageDialog(this.td, "Invalid Input\nThis transaction will make balance to go below 0.\nYour "+typeT.toLowerCase()+" amount:"+this.td.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
 			}
 			break; 
 		case 2:
+			if(td.type<3) {
 			this.td.setVisible(false);
 			SelectWindow window = new SelectWindow(this.td.c,this.td.a);
 			window.launchSelectWindow();
+			}else {
+				this.td.setVisible(false);
+				PocketWindow window = new PocketWindow(this.td.c,(Pocket_account)this.td.a);
+				window.launchSelectWindow();
+			}
 			break;
 		}
 		
 		
 	}
 	public void updateAmount(float total) {
+		boolean unique = true;
+		while(unique){
 		try {
 			PreparedStatement update = conn.prepareStatement(
 					"UPDATE Account SET amount = "+total+" WHERE Aid = '"+this.td.a.getAccount()+"'");
@@ -150,21 +197,30 @@ public class TDMonitor implements ActionListener {
 			update.executeUpdate();
 			String tid = "";
 			String typeT = "";
-			if(td.type) {
+			if(td.type==1) {
 				tid+=TIDGenerator(1);
 				typeT = "depost";
-			}else {
+			}else if(td.type==2){
 				tid+=TIDGenerator(2);
 				typeT = "withdraw";
+			}else if(td.type==4) {
+				tid+=TIDGenerator(6);
+				typeT = "purchase";
 			}
 			String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
 			update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+this.td.a.getAccount()+"','" +this.td.a.getAccount()+"','"+ typeT +"'," + this.td.getAmount()+")");
 			update.executeUpdate();
+			unique = false;
 			System.out.println("Transaction completed!");
-		} catch (Exception e) {
+    		flag = true;
+		}catch(java.sql.SQLIntegrityConstraintViolationException e) {
+			unique = true;
+		}catch (Exception e) {
 			System.out.println(e);
+			unique =false;
 		} finally {
 			System.out.println("funcion completed!");
+		}
 		}
 	}
 	public String TIDGenerator(int type) {
@@ -187,6 +243,62 @@ public class TDMonitor implements ActionListener {
 			System.out.println(e);
 		} finally {
 			System.out.println("funcion completed!");
+		}
+	}
+	public void TC(float total) {
+		boolean unique = true;
+		while(unique){
+		try {
+			String tid = "";
+			String typeT = "";
+			Pocket_account p = (Pocket_account)td.a;
+			String link_aid = p.getLinkedAccount_ID();
+			System.out.println(link_aid);
+			float link_amount = 0;
+			PreparedStatement update = conn.prepareStatement("SELECT A.Amount FROM Account A WHERE A.Aid = '"+link_aid+"'");
+			ResultSet rs = update.executeQuery();
+			if(rs.next()) {
+				link_amount = rs.getFloat(1);
+			}
+			if(td.type==3) {
+				tid+=TIDGenerator(5);
+				typeT = "Top-Up";
+				link_amount -= td.getAmount();
+			}else if(td.type==5){
+				tid+=TIDGenerator(7);
+				typeT = "Collect";
+				link_amount += td.getAmount();
+			}
+			System.out.println(link_amount);
+			if(link_amount>=0) {
+			update = conn.prepareStatement(
+					"UPDATE Account SET amount = "+total+" WHERE Aid = '"+this.td.a.getAccount()+"'");
+			update.executeUpdate();
+			System.out.println("Update completed!");
+			
+			
+				update = conn.prepareStatement(
+						"UPDATE Account SET amount = "+link_amount+" WHERE Aid = '"+link_aid+"'");
+			update.executeUpdate();
+			String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+			update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+this.td.a.getAccount()+"','" +link_aid+"','"+ typeT +"'," + this.td.getAmount()+")");
+			update.executeUpdate();
+			unique = false;
+    		flag = true;
+			System.out.println("Transaction completed!");
+			}else {
+				unique = false;
+				flag = false;
+				JOptionPane.showMessageDialog(this.td, "Invalid Input\nThis transaction will make balance to go below 0.\nYour "+typeT.toLowerCase()+" amount:"+this.td.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
+			}
+		}catch(java.sql.SQLIntegrityConstraintViolationException e) {
+			unique = true;
+		}catch (Exception e) {
+			System.out.println(e);
+			unique =false;
+		} finally {
+			System.out.println("funcion completed!");
+		}
 		}
 	}
 

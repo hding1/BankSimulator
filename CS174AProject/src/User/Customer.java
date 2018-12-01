@@ -2,6 +2,7 @@ package User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -48,15 +49,16 @@ public class Customer {
 			System.out.println("Creating statement...");
 			stmt = conn.createStatement();
 
-			String query = "SELECT O.Aid FROM Own_by O WHERE O.TaxID = "+this.TaxID;
-			ResultSet rs = stmt.executeQuery(query);
+			String query = "SELECT * FROM Own_by O WHERE O.TaxID = '"+TaxID+"'";
+
+			PreparedStatement accountQuery = conn.prepareStatement(query);
+			ResultSet rs = accountQuery.executeQuery();
 			while(rs.next()) {
 				String aid = rs.getString("Aid");
 	            Accounts.add(getAccount(aid));
 	            System.out.println(aid); 
-	            System.out.println("pull accounts complete");
+	            System.out.println("pull account complete");
 	        }
-			rs.close();
 		} catch (SQLException se) {
 			// Handle errors for JDBC
 			se.printStackTrace();

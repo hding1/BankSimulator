@@ -40,7 +40,7 @@ public class SelectAccountWindow extends JFrame {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-		this.setVisible(true);
+
 		//Labels
 		JLabel userLabel = new JLabel("Select an Account Below");
 		JLabel accountLabel = new JLabel("Account ID                 Balance");
@@ -74,6 +74,7 @@ public class SelectAccountWindow extends JFrame {
 //		JButton Back = new JButton("Back");
 //		Back.setActionCommand("2");
 //		this.add(Back);
+		this.setVisible(true);
 		
 	}
 	public Account getAccount() {

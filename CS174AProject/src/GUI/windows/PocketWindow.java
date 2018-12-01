@@ -16,6 +16,7 @@ import GUI.monitor.PocketMonitor;
 import GUI.monitor.SelectMonitor;
 import User.Account;
 import User.Customer;
+import User.Pocket_account;
 
 //import GUI.monitor.SelectButtonMonitor;
 
@@ -23,8 +24,8 @@ import User.Customer;
 
 public class PocketWindow extends JFrame {
 	private Customer c;
-	private Account a;
-	public PocketWindow(Customer c, Account a) {
+	private Pocket_account a;
+	public PocketWindow(Customer c, Pocket_account a) {
 		super();
 		this.c = c;
 		this.a = a;
@@ -87,6 +88,12 @@ public class PocketWindow extends JFrame {
 		this.getContentPane().add(Button6);
 		
 		this.setVisible(true);
+	}
+	public Customer getCustomer() {
+		return this.c;
+	}
+	public Pocket_account getAccount() {
+		return this.a;
 	}
 	
 }

@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 
 import GUI.windows.loginWindow;
 import User.Customer;
+import User.Pocket_account;
 import GUI.windows.PocketWindow;
 import GUI.windows.SelectAccountWindow;
 import GUI.windows.SelectWindow;
@@ -58,19 +59,22 @@ public class SelectAccountMonitor implements ActionListener {
 		switch (command) {
 		case 1:
 			if(saw.getAccount().getAccount().charAt(0)!='4') {
+				this.saw.setVisible(false);
 				SelectWindow sw = new SelectWindow(saw.getCustomer(),saw.getAccount());
 				sw.launchSelectWindow();
-				this.saw.setVisible(false);
+				
 			}else {
-				PocketWindow pw = new PocketWindow(saw.getCustomer(),saw.getAccount());
-				pw.launchSelectWindow();
 				this.saw.setVisible(false);
+				PocketWindow pw = new PocketWindow(saw.getCustomer(),(Pocket_account)saw.getAccount());
+				pw.launchSelectWindow();
+				
 			}
 			break;
 		case 2:
+			this.saw.setVisible(false);
 			loginWindow lw = new loginWindow();
 			lw.launchLoginWindow();
-			this.saw.setVisible(false);
+			
 			break;
 		}
 		

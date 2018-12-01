@@ -82,11 +82,9 @@ public class LoginButtonMonitor implements ActionListener {
 
 			      //String sql = "SELECT cid, cname, city, discount FROM cs174.Customers";
 			      String sql = "SELECT * FROM Customer C Where C.TaxID = "+this.loginWindow.getUserid().getText();
-			      ResultSet rs = stmt.executeQuery(sql);
-			      while(rs.next()){
-			      if(rs==null) {
-			    	  JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
-			      }else {
+			      PreparedStatement update = conn.prepareStatement(sql);
+			      ResultSet rs = update.executeQuery();
+			      if(rs.next()) {
 			    	  String pin = rs.getString("PIN");
 			    	  if(pin.equals(this.loginWindow.getPassword().getText())) {
 			    		  	Customer c = new Customer(rs.getString("Name"),rs.getString("TaxID"),rs.getString("Address"),rs.getString("PIN"));
@@ -97,8 +95,25 @@ public class LoginButtonMonitor implements ActionListener {
 			    	  }else {
 			    		  JOptionPane.showMessageDialog(null, "Incorrect Password!", "Incorrect Password!", JOptionPane.PLAIN_MESSAGE);
 			    	  }
+			      }else {
+			    	  JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
 			      }
-			      }
+//			      while(rs.next()){
+//			      if(rs==null) {
+//			    	  JOptionPane.showMessageDialog(null, "Account " + this.loginWindow.getUserid().getText() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
+//			      }else {
+//			    	  String pin = rs.getString("PIN");
+//			    	  if(pin.equals(this.loginWindow.getPassword().getText())) {
+//			    		  	Customer c = new Customer(rs.getString("Name"),rs.getString("TaxID"),rs.getString("Address"),rs.getString("PIN"));
+//			    			System.out.println(c.getList().size());
+//			    		  	SelectAccountWindow selectwindow=new SelectAccountWindow(c);
+//			    			selectwindow.launchSelectwindow();
+//			    			this.loginWindow.setVisible(false);
+//			    	  }else {
+//			    		  JOptionPane.showMessageDialog(null, "Incorrect Password!", "Incorrect Password!", JOptionPane.PLAIN_MESSAGE);
+//			    	  }
+//			      }
+//			      }
 
 			      rs.close();
 			}catch(SQLException se){

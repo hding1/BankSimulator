@@ -29,9 +29,9 @@ public class TWWindow extends JFrame {
 	private JTextField account;
 	public Customer c;
 	public Account a;
-	public boolean type;
+	public int type;
 	
-	public TWWindow(Customer c, Account a, boolean type) {
+	public TWWindow(Customer c, Account a, int type) {
 		super();
 		this.c = c;
 		this.a = a;
@@ -55,14 +55,15 @@ public class TWWindow extends JFrame {
 		this.add(accountID);
 		JLabel ToID = new JLabel("To            ");
 		this.add(ToID);
-		if(type) {
+		switch(type) {
+		case 1:
 			title = "Transfer";
 			String[] accountString = c.getAccountID();
 			AccountList = new JComboBox<>(accountString);
 			AccountList.setPreferredSize(dim);
 			this.getContentPane().add(AccountList);
-			
-		}else {
+			break;
+		case 2:	
 			title = "Wire";
 			this.account = new JFormattedTextField();
 			account.getDocument().addDocumentListener(new DocumentListener() {
@@ -92,8 +93,38 @@ public class TWWindow extends JFrame {
 			});
 			this.account.setPreferredSize(dim);
 			this.add(account);
-		}
+			break;
+		case 3:
+			title = "Pay-Friend";
+			this.account = new JFormattedTextField();
+			account.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					Runnable format = new Runnable() {
+						@Override
+						public void run() {
+							String text = account.getText();
+							if (!text.matches("\\d*(\\\\d{0,2})?")) {
+								account.setText(text.substring(0, text.length() - 1));
+							}
+						}
+					};
+					SwingUtilities.invokeLater(format);
+				}
 
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+
+				}
+
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+
+				}
+			});
+			this.account.setPreferredSize(dim);
+			this.add(account);
+		}
 		this.setTitle(title);
 		this.setSize(240,160);
 		this.setResizable(false);
@@ -171,7 +202,15 @@ public class TWWindow extends JFrame {
 		return myAmount;
 	}
 	public String getAccountID() {
-		return (String) AccountList.getSelectedItem();
+		switch(type) {
+		case 1:
+			return (String) AccountList.getSelectedItem();
+		case 2:
+			return account.getText();
+		case 3:
+			return account.getText();
+		}
+		return account.getText();
 	}
 	
 }
