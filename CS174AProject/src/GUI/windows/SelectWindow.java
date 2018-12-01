@@ -87,5 +87,10 @@ public class SelectWindow extends JFrame {
 		
 		this.setVisible(true);
 	}
-	
+	public Customer getCustomer() {
+		return this.c;
+	}
+	public Account getAccount() {
+		return this.a;
+	}
 }

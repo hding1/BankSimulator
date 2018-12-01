@@ -18,7 +18,7 @@ public abstract class Account {
 	Account(String Account_id, String TaxID, float Amount, String Branch, char status){
 		this.Amount = Amount;
 		this.Account_id = Account_id;
-		this.Pname = Pname;
+		this.Pname = TaxID;
 		this.Branch = Branch;
 		this.Status = status;
 	}
@@ -62,4 +62,5 @@ public abstract class Account {
 	public void setStatus(char Status) {
 		this.Status = Status;
 	}
+	
 }

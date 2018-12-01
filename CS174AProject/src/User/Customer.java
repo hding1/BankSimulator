@@ -78,6 +78,13 @@ public class Customer {
 			} // end finally try
 		}
 	}
+	public String[] getAccountID() {
+		String[] result = new String[Accounts.size()];
+		for(int i = 0;i<Accounts.size();i++) {
+			result[i] = Accounts.get(i).getAccount();
+		}
+		return result;
+	}
 	 
 	public String getName() {
 		return this.Name;
@@ -151,5 +158,6 @@ public class Customer {
 		} 
 		return null;
 	}
+	
 	
 }

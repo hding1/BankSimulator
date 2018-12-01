@@ -9,7 +9,7 @@ public class Saving_account extends Account{
 		Interest_rate = 7.5f;
 	}
 	
-	Saving_account(String Account_id, String TaxID, float Amount, String Branch, char branch, float IR){
+	Saving_account(String Account_id, String TaxID, float Amount, String Branch, char branch,float IR){
 		super(Account_id, TaxID, Amount, Branch, branch);
 		Interest_rate = IR;
 	}
