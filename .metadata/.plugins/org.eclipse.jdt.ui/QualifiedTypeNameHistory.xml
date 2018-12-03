@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="javax.swing.text.AttributeSet"/>
     <fullyQualifiedTypeName name="javax.print.attribute.AttributeSet"/>
     <fullyQualifiedTypeName name="java.awt.FlowLayout"/>
+    <fullyQualifiedTypeName name="GUI.windows.SignUPWindow"/>
+    <fullyQualifiedTypeName name="javax.swing.text.PlainDocument"/>
+    <fullyQualifiedTypeName name="javax.swing.text.BadLocationException"/>
+    <fullyQualifiedTypeName name="javax.swing.text.Document"/>
+    <fullyQualifiedTypeName name="javax.swing.text.AttributeSet"/>
+    <fullyQualifiedTypeName name="javax.swing.JComboBox"/>
+    <fullyQualifiedTypeName name="javax.swing.event.DocumentEvent"/>
+    <fullyQualifiedTypeName name="javax.swing.JFormattedTextField"/>
+    <fullyQualifiedTypeName name="java.text.NumberFormat"/>
+    <fullyQualifiedTypeName name="javax.swing.event.DocumentListener"/>
+    <fullyQualifiedTypeName name="javax.swing.SwingUtilities"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.sql.ResultSet"/>
+    <fullyQualifiedTypeName name="javax.swing.DefaultListModel"/>
+    <fullyQualifiedTypeName name="javax.swing.JList"/>
+    <fullyQualifiedTypeName name="GUI.windows.SelectAccountWindow"/>
+    <fullyQualifiedTypeName name="javax.swing.JScrollPane"/>
+    <fullyQualifiedTypeName name="javax.swing.ListSelectionModel"/>
+    <fullyQualifiedTypeName name="java.awt.Font"/>
+    <fullyQualifiedTypeName name="User.Customer"/>
+    <fullyQualifiedTypeName name="User.Account"/>
+    <fullyQualifiedTypeName name="GUI.monitor.PocketMonitor"/>
+    <fullyQualifiedTypeName name="GUI.monitor.SelectAccountMonitor"/>
+    <fullyQualifiedTypeName name="GUI.monitor.TDMonitor"/>
+    <fullyQualifiedTypeName name="GUI.windows.TDWindow"/>
+    <fullyQualifiedTypeName name="javax.swing.JFrame"/>
+    <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
+    <fullyQualifiedTypeName name="java.util.Calendar"/>
+    <fullyQualifiedTypeName name="GUI.monitor.TWMonitor"/>
+    <fullyQualifiedTypeName name="GUI.windows.TWWindow"/>
+    <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
+    <fullyQualifiedTypeName name="GUI.windows.PocketWindow"/>
+    <fullyQualifiedTypeName name="User.Pocket_account"/>
 </qualifiedTypeNameHistroy>

@@ -1,0 +1,166 @@
+package User;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public abstract class Account {
+	protected float Amount;
+	protected String Account_id;
+	protected String Pname;
+	protected String Branch;
+	protected char Status;
+	private ArrayList<Transaction> tlist;
+	final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+	final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
+
+	final String USERNAME = "fliang";
+	final String PASSWORD = "123455";
+	
+	Connection conn = null;
+	Statement stmt = null;
+	
+	Account(){
+		this.Amount = 0;
+		this.Account_id = "";
+		this.Pname = "";
+		this.Branch = "";
+		this.Status = '1';
+	}
+	
+	Account(String Account_id, String TaxID, float Amount, String Branch, char status){
+		this.Amount = Amount;
+		this.Account_id = Account_id;
+		this.Pname = TaxID;
+		this.Branch = Branch;
+		this.Status = status;
+		tlist = new ArrayList<Transaction>();		
+		try {
+			// STEP 2: Register JDBC driver
+			Class.forName(JDBC_DRIVER);
+
+			// STEP 3: Open a connection
+			System.out.println("Connecting to a selected database...");
+			conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+			System.out.println("Connected database successfully...");
+
+			// STEP 4: Execute a query
+			System.out.println("Creating statement...");
+			stmt = conn.createStatement();
+
+			String query = "SELECT * FROM Record_Transaction T WHERE T.Aid_1 = '"+Account_id+"'"+" UNION "+" SELECT * FROM Record_Transaction T WHERE T.Aid_2 = '"+Account_id+"'";
+
+			PreparedStatement accountQuery = conn.prepareStatement(query);
+			ResultSet rs = accountQuery.executeQuery();
+			while(rs.next()) {
+				String aid = rs.getString("Tid");
+	            tlist.add(getAccount(aid));
+	            System.out.println(aid); 
+	            System.out.println("pull account complete");
+	        }
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+		} catch (Exception ea) {
+			// Handle errors for Class.forName
+			ea.printStackTrace();
+		} finally {
+			// finally block used to close resources
+			try {
+				if (stmt != null)
+					conn.close();
+			} catch (SQLException se) {
+			} // do nothing
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			} // end finally try
+		}
+	}
+	
+	public float getAmount() {
+		return this.Amount;
+	} 
+	
+	public String getAccount() {
+		return this.Account_id;
+	}
+	
+	public String getPname() {
+		return this.Pname;
+	}
+	
+	public String getBranch() {
+		return this.Branch;
+	}
+	
+	public char getStatus() {
+		return this.Status;
+	}
+	
+	public void setAmount(float Amount) {
+		this.Amount = Amount;
+	}
+	
+	public void setAccount(String Account_id) {
+		this.Account_id = Account_id;
+	}
+	
+	public void setPname(String Pname) {
+		this.Pname = Pname;
+	}
+	
+	public void setBranch(String Branch) {
+		this.Branch = Branch;
+	}
+	
+	public void setStatus(char Status) {
+		this.Status = Status;
+	}
+	private Transaction getTransaction(String tid) {
+		try {
+			String query = "";
+			ResultSet rs;
+			if(aid.charAt(0)=='1') {
+				query = "SELECT * From Account A, Student_Checking S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
+				rs = stmt.executeQuery(query);
+				rs.next();
+				Account new_account = new Student_check_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
+				return new_account;
+			}else if(aid.charAt(0)=='2') {
+				query = "SELECT * From Account A, Interest_Checking S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
+				rs = stmt.executeQuery(query);
+				rs.next();
+				Account new_account = new Interest_check_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
+				return new_account;
+			}else if(aid.charAt(0)=='3') {
+				query = "SELECT * From Account A, Saving S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
+				rs = stmt.executeQuery(query);
+				rs.next();
+				Account new_account = new Saving_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
+				return new_account;
+			}else {
+				query = "SELECT * From Account A, Pocket S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
+				rs = stmt.executeQuery(query);
+				rs.next();
+				Account new_account = new Pocket_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getString("Link_aid"));
+				return new_account;
+			}
+			
+			
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+		} catch (Exception ea) {
+			// Handle errors for Class.forName
+			ea.printStackTrace();
+		} 
+		return null;
+	}
+}

@@ -1,0 +1,56 @@
+package GUI.monitor;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JOptionPane;
+
+import GUI.windows.PocketWindow;
+import GUI.windows.SelectWindow;
+
+
+public class PocketMonitor  implements ActionListener{
+	private PocketWindow pw;
+	public PocketMonitor(PocketWindow pw) {
+		this.pw = pw;
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		int command = Integer.parseInt(e.getActionCommand());
+		switch (command) {
+		case 1:
+			String status = "";
+			if(pw.getAccount().getStatus()=='1') {
+				status = "open";
+			}else {
+				status = "close";
+			}
+			JOptionPane.showMessageDialog(this.pw, 
+					"Account ID: "+this.pw.getAccount().getAccount()+
+					"\nBalance: "+this.pw.getAccount().getAmount()+
+					"\nBranch: "+this.pw.getAccount().getBranch()+
+					"\nPrimary Owner TID: "+this.pw.getAccount().getPname()+
+					"\nStatus: "+status, "Account Info"+
+					"\nLinked Account: "+this.pw.getAccount().getLinkedAccount_ID(),JOptionPane.PLAIN_MESSAGE);
+			break;
+		case 2:
+			
+			break;
+		case 3:
+			
+			break;
+		case 4:
+			
+			break;
+        case 5:
+        	
+			break;
+        case 6:
+        	pw.setVisible(false);
+        	System.exit(0);
+	       break;
+		}
+	}
+
+}

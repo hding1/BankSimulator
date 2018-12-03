@@ -1,0 +1,218 @@
+package GUI.monitor;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Calendar;
+import java.util.Random;
+import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+
+
+import GUI.windows.loginWindow;
+import User.Customer;
+import GUI.windows.SelectWindow;
+import GUI.windows.SignUPWindow;
+import GUI.windows.TWWindow;
+import GUI.windows.BankTellerWindow;
+import GUI.windows.SelectAccountWindow;
+
+import java.sql.*;
+import java.text.SimpleDateFormat;
+
+public class TWMonitor implements ActionListener {
+	private TWWindow tw;
+
+	/**
+
+	 * @param loginWindow
+	 */
+	
+	static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+	static final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
+
+	static final String USERNAME = "fliang";
+	static final String PASSWORD = "123455";
+	Connection conn = null;
+	Statement stmt = null;
+	String otherAccount;
+	boolean flag;
+	
+
+	
+	public TWMonitor(TWWindow twWindow) {
+		this.tw = twWindow;
+		flag = false;
+	}
+	
+
+
+	//@Override
+	public void actionPerformed(ActionEvent e) {
+		int command = Integer.parseInt(e.getActionCommand());
+		switch (command) {
+		case 1:
+			//acount update
+			String typeT = "";
+			float total = 0;
+			otherAccount = tw.getAccountID();
+			
+			if(tw.type) {
+				typeT = "Transfer";
+				if(this.tw.getAmount()>2000) {
+					JOptionPane.showMessageDialog(this.tw, "Transfer amount cannot exceed $2000", "Incorrect PIN", JOptionPane.PLAIN_MESSAGE);
+					break;
+				}
+				total = this.tw.a.getAmount() - this.tw.getAmount();
+			}else {
+				typeT = "Wire";
+				total = this.tw.a.getAmount()- this.tw.getAmount()*1.02f;
+			}
+			
+			if(total>=0) {
+			this.tw.a.setAmount(total);
+			try {
+				// STEP 2: Register JDBC driver
+				Class.forName(JDBC_DRIVER);
+
+				// STEP 3: Open a connection
+				System.out.println("Connecting to a selected database...");
+				conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+				System.out.println("Connected database successfully...");
+
+				// STEP 4: Execute a query
+				System.out.println("Creating statement...");
+				stmt = conn.createStatement();
+
+//			      createTable(conn);
+				String sql = "SELECT * FROM Customer C Where C.TaxID = "+this.tw.c.getTaxID();
+				PreparedStatement update = conn.prepareStatement(sql);
+				ResultSet rs = update.executeQuery();
+			    
+			    while(rs.next()){
+			    	String pin = rs.getString("PIN");
+			    	if(pin.equals(this.tw.getPIN())) {
+			    		
+			    		updateAmount(total);
+			    		if(total<=0.01) {
+			    			this.tw.a.setStatus('0');
+							JOptionPane.showMessageDialog(this.tw, "Balance below 0.01\nThe account is closed"+typeT.toLowerCase()+" amount:"+this.tw.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
+			    			closeAccount();
+			    		}
+			    		flag = true;
+			    	}else {
+			    		JOptionPane.showMessageDialog(null, "Incorrect PIN", "Incorrect PIN", JOptionPane.PLAIN_MESSAGE);
+			    	}
+			    }
+			} catch (SQLException se) {
+				// Handle errors for JDBC
+				se.printStackTrace();
+			} catch (Exception ea) {
+				// Handle errors for Class.forName
+				ea.printStackTrace();
+			} finally {
+				// finally block used to close resources
+				try {
+					if (stmt != null)
+						conn.close();
+				} catch (SQLException se) {
+				} // do nothing
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				} // end finally try
+			}
+			if(flag) {
+
+				JOptionPane.showMessageDialog(null, typeT+" Succeed\nYour current balance is \n$"+total,"Transaction Successful",  JOptionPane.PLAIN_MESSAGE);
+				this.tw.setVisible(false);
+				SelectWindow window = new SelectWindow(this.tw.c,this.tw.a);
+				window.launchSelectWindow();
+			}
+			}else {
+				JOptionPane.showMessageDialog(this.tw, "Invalid Input\nThis transaction will make balance to go below 0.\nYour "+typeT.toLowerCase()+" amount:"+this.tw.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
+			}
+			break; 
+		case 2:
+			this.tw.setVisible(false);
+			SelectWindow window = new SelectWindow(this.tw.c,this.tw.a);
+			window.launchSelectWindow();
+			break;
+		}
+		
+		
+	}
+	public void updateAmount(float total) {
+		boolean unique = true;
+		while(unique){
+		try {
+			
+			PreparedStatement update = conn.prepareStatement(
+					"UPDATE Account SET amount = "+total+" WHERE Aid = '"+this.tw.a.getAccount()+"'");
+			update.executeUpdate();
+			System.out.println("Account To Update completed!");
+			update = conn.prepareStatement("SELECT A.Amount FROM Account A WHERE Aid = '" + this.otherAccount+ "'");
+			ResultSet r = update.executeQuery();
+			float amount = 0;
+			while(r.next()) {
+				amount = r.getFloat(1);
+			}
+			update = conn.prepareStatement(
+					"UPDATE Account SET amount = "+(amount+tw.getAmount())+" WHERE Aid = '"+this.otherAccount+"'");
+			update.executeUpdate();
+			System.out.println("Account From Update completed!");
+			String tid = "";
+			String typeT = "";
+			if(tw.type) {
+				tid+=TIDGenerator(3);
+				typeT = "transfer";
+			}else {
+				tid+=TIDGenerator(4);
+				typeT = "wire";
+			}
+			String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+			update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+this.tw.a.getAccount()+"','" +this.otherAccount+"','"+ typeT +"'," + this.tw.getAmount()+")");
+			update.executeUpdate();
+			unique = false;
+			System.out.println("Transaction completed!");
+		}catch(java.sql.SQLIntegrityConstraintViolationException e) {
+			unique = true;
+		}catch (Exception e) {
+			System.out.println(e);
+			unique =false;
+		} finally {
+			System.out.println("funcion completed!");
+		}
+		}
+	}
+	public String TIDGenerator(int type) {
+		String result = Integer.toString(type);
+		Random rand = new Random();
+		for (int i = 0; i < 9; i++) {
+			int rand_int = rand.nextInt(10);
+			result += Integer.toString(rand_int);
+		}
+
+		return result;
+	}
+	public void closeAccount() {
+		try {
+			PreparedStatement update = conn.prepareStatement(
+					"UPDATE Account SET Open = '0' WHERE Aid = '"+this.tw.a.getAccount()+"'");
+			update.executeUpdate();
+			System.out.println("Close completed!");
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			System.out.println("funcion completed!");
+		}
+	}
+
+}

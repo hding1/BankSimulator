@@ -1,0 +1,65 @@
+package GUI.monitor;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+
+
+import GUI.windows.loginWindow;
+import User.Customer;
+import GUI.windows.SelectWindow;
+import GUI.windows.SignUPWindow;
+import GUI.windows.TDWindow;
+import GUI.windows.BankTellerWindow;
+import GUI.windows.SelectAccountWindow;
+
+import java.sql.*;
+
+public class TDMonitor implements ActionListener {
+	private TDWindow td;
+
+	/**
+
+	 * @param loginWindow
+	 */
+	
+	static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+	static final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
+
+	static final String USERNAME = "fliang";
+	static final String PASSWORD = "123455";
+	
+
+	
+	public TDMonitor(TDWindow tdWindow) {
+		this.td = tdWindow;
+	}
+	
+
+
+	//@Override
+	public void actionPerformed(ActionEvent e) {
+		int command = Integer.parseInt(e.getActionCommand());
+		switch (command) {
+		case 1:
+			
+			break;
+		case 2:
+			this.td.setVisible(false);
+			SelectWindow window = new SelectWindow(this.td.c,this.td.a);
+			window.launchSelectWindow();
+			break;
+		}
+		
+		
+	}
+
+
+}

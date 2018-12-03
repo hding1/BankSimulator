@@ -1,0 +1,48 @@
+package GUI.monitor;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+
+import GUI.windows.SelectWindow;
+import GUI.windows.TDWindow;
+
+
+public class SelectMonitor  implements ActionListener{
+	private SelectWindow selectwindow;
+	public SelectMonitor(SelectWindow selectwindow) {
+		this.selectwindow = selectwindow;
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		TDWindow window;
+		int command = Integer.parseInt(e.getActionCommand());
+		switch (command) {
+		case 1:
+			
+			break;
+		case 2:
+			this.selectwindow.setVisible(false);
+			window = new TDWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),true);
+			window.launchWindow();
+			break;
+		case 3:
+			this.selectwindow.setVisible(false);
+			window = new TDWindow(this.selectwindow.getCustomer(),this.selectwindow.getAccount(),false);
+			window.launchWindow();
+			break;
+		case 4:
+			
+			break;
+        case 5:
+        	
+			break;
+        case 6:
+        	selectwindow.setVisible(false);
+        	System.exit(0);
+	       break;
+		}
+	}
+
+}

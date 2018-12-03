@@ -3,26 +3,22 @@ package User;
 public class Transaction {
 
 	private String type;
-	private int Account_1_ID;
-	private int Account_2_ID;
-	private int TransactionID;
-	private double Amount;
+	private String Aid1;
+	private String Aid2;
+	private String tid;
+	private float Amount;
 	private String Date;
 	
 	Transaction(){
 		this.type = "";
-		this.Account_1_ID = 0;
-		this.Account_2_ID = 0;
-		this.TransactionID = 0;
-		this.Amount = 0.0;
 		this.Date = "";
 	}
 	
-	Transaction(String type, int Account_1_ID, int Account_2_ID, int TransactionID, double Amount, String Date){
+	Transaction(String tid, String Date, String Aid1, String Aid2,  String type, float Amount){
 		this.type = type;
-		this.Account_1_ID = Account_1_ID;
-		this.Account_2_ID = Account_2_ID;
-		this.TransactionID = TransactionID;
+		this.Aid1 = Aid1;
+		this.Aid2 = Aid2;
+		this.tid = tid;
 		this.Amount = Amount;
 		this.Date = Date;
 	}
@@ -31,16 +27,16 @@ public class Transaction {
 		return this.type;
 	}
 	
-	public int getAccount_1_ID() {
-		return this.Account_1_ID;
+	public String getAid1() {
+		return this.Aid1;
 	}
 	
-	public int getAccount_2_ID() {
-		return this.Account_2_ID;
+	public String getAid2() {
+		return this.Aid2;
 	}
 	
-	public int getTransactionID() {
-		return this.TransactionID;
+	public String gettid() {
+		return this.tid;
 	}
 	
 	public double getAmount() {
@@ -55,19 +51,19 @@ public class Transaction {
 		this.type = type;
 	}
 	
-	public void setAccount_1_ID(int Account_1_ID) {
-		this.Account_1_ID = Account_1_ID;
+	public void setAid1(String Aid1) {
+		this.Aid1 = Aid1;
 	}
 	
-	public void setAccount_2_ID(int Account_2_ID) {
-		this.Account_2_ID = Account_2_ID;
+	public void setAid2(String Aid2) {
+		this.Aid2 = Aid2;
 	}
 	
-	public void setTransactionID(int TransactionID) {
-		this.TransactionID = TransactionID;
+	public void settid(String tid) {
+		this.tid = tid;
 	}
 	
-	public void setAmount(int Amount) {
+	public void setAmount(float Amount) {
 		this.Amount = Amount;
 	}
 	
