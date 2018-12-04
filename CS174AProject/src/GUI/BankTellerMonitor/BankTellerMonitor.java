@@ -156,7 +156,8 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 				boolean flag = true;
 				for(int i=0; i<savinglist.size();i++) {
 					for(int j=0;j<savinglist.get(i).getList().size();j++) {
-						if(savinglist.get(i).getList().get(j).getType().equals("intereset")) {
+						
+						if(savinglist.get(i).getList().get(j).getType().replaceAll(" ", "").equals("interest")) {
 							flag = false;
 						}
 					}
@@ -170,14 +171,19 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
 						update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+savinglist.get(i).getAccount()+"','" +savinglist.get(i).getAccount()+"','interest'," + interest+")");
 						update.executeUpdate();
+					}else {
+						System.out.println("Already Added");
 					}
 					flag = true;
 				}
 				for(int i=0; i<studentlist.size();i++) {
+
 					for(int j=0;j<studentlist.get(i).getList().size();j++) {
-						if(studentlist.get(i).getList().get(j).getType().equals("intereset")) {
+						
+						if(studentlist.get(i).getList().get(j).getType().replaceAll(" ", "").equals("interest")) {
 							flag = false;
 						}
+
 					}
 					if(flag) {
 						float interest = studentlist.get(i).getAmount()*studentlist.get(i).getIntere_rate()/100;
@@ -189,15 +195,21 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
 						update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+studentlist.get(i).getAccount()+"','" +studentlist.get(i).getAccount()+"','interest'," + interest+")");
 						update.executeUpdate();
+						
+					}else {
+						System.out.println("Already Added");
 					}
 					flag = true;
 				}
 				for(int i=0; i<checkinglist.size();i++) {
+					
 					for(int j=0;j<checkinglist.get(i).getList().size();j++) {
-						if(checkinglist.get(i).getList().get(j).getType().equals("intereset")) {
+						
+						if(checkinglist.get(i).getList().get(j).getType().replaceAll(" ", "").equals("interest")) {
 							flag = false;
 						}
 					}
+
 					if(flag) {
 						float interest = checkinglist.get(i).getAmount()*checkinglist.get(i).getInterest_rate()/100;
 						float amount = checkinglist.get(i).getAmount()+interest;
@@ -208,6 +220,8 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
 						update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+checkinglist.get(i).getAccount()+"','" +checkinglist.get(i).getAccount()+"','interest'," + interest+")");
 						update.executeUpdate();
+					}else {
+						System.out.println("Already Added");
 					}
 					flag = true;
 				}
