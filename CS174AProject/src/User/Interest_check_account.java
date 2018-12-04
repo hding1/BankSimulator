@@ -5,7 +5,7 @@ public class Interest_check_account extends Account{
 	private float Interest_rate;
 	
 	
-	Interest_check_account(String Account_id, String TaxID, float Amount, String Branch, char status, float ir){
+	public Interest_check_account(String Account_id, String TaxID, float Amount, String Branch, char status, float ir){
 		super(Account_id, TaxID, Amount, Branch, status);
 		Interest_rate = ir;
 	}

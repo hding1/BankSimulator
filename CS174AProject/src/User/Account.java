@@ -90,7 +90,9 @@ public abstract class Account {
 	public float getAmount() {
 		return this.Amount;
 	} 
-	
+	public ArrayList<Transaction> getList(){
+		return tlist;
+	}
 	public String getAccount() {
 		return this.Account_id;
 	}
@@ -126,44 +128,5 @@ public abstract class Account {
 	public void setStatus(char Status) {
 		this.Status = Status;
 	}
-//	private Transaction getTransaction(String tid) {
-//		try {
-//			String query = "";
-//			ResultSet rs;
-//			if(aid.charAt(0)=='1') {
-//				query = "SELECT * From Account A, Student_Checking S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
-//				rs = stmt.executeQuery(query);
-//				rs.next();
-//				Account new_account = new Student_check_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
-//				return new_account;
-//			}else if(aid.charAt(0)=='2') {
-//				query = "SELECT * From Account A, Interest_Checking S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
-//				rs = stmt.executeQuery(query);
-//				rs.next();
-//				Account new_account = new Interest_check_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
-//				return new_account;
-//			}else if(aid.charAt(0)=='3') {
-//				query = "SELECT * From Account A, Saving S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
-//				rs = stmt.executeQuery(query);
-//				rs.next();
-//				Account new_account = new Saving_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
-//				return new_account;
-//			}else {
-//				query = "SELECT * From Account A, Pocket S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
-//				rs = stmt.executeQuery(query);
-//				rs.next();
-//				Account new_account = new Pocket_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getString("Link_aid"));
-//				return new_account;
-//			}
-//			
-//			
-//		} catch (SQLException se) {
-//			// Handle errors for JDBC
-//			se.printStackTrace();
-//		} catch (Exception ea) {
-//			// Handle errors for Class.forName
-//			ea.printStackTrace();
-//		} 
-//		return null;
-//	}
+
 }
