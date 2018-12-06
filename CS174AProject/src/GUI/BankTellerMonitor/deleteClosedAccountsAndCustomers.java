@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
+import GUI.windows.SelectAccountWindow;
+import User.Customer;
+
 import java.sql.*;
 
 import javax.swing.JOptionPane;
@@ -45,20 +48,35 @@ public class deleteClosedAccountsAndCustomers {//implements ActionListener{
 				
 				while(rs.next()) {
 					System.out.println(rs.getString("TaxID"));
-					String TaxID = rs.getString("TaxID");
-					String sql2 = "DELETE FROM Own_by WHERE TaxID = '" + TaxID + "'";
-					String sql3 = "DELETE FROM Customer WHERE TaxID = '" + TaxID + "'";
-					String sql4 = "DELETE FROM Account WHERE Open = '0'";
+					String AID = rs.getString("Aid");
+					String sql2 = "DELETE FROM Own_by O WHERE O.Aid = '" + AID + "'";
+					//String sql3 = "DELETE FROM Customer C WHERE C.TaxID = '" + TaxID + "'";
+					String sql4 = "DELETE FROM Account A WHERE A.Aid = '" + AID + "'";
 					PreparedStatement deleteCustomerTable = conn.prepareStatement(sql2);
-					PreparedStatement deleteOwnbyTable = conn.prepareStatement(sql3);
+					//PreparedStatement deleteOwnbyTable = conn.prepareStatement(sql3);
 					PreparedStatement deleteAccountTable = conn.prepareStatement(sql4);
 					deleteCustomerTable.executeUpdate();
 					System.out.println("SQL COMMAND COMPLETE");
-					deleteOwnbyTable.executeUpdate();
-					System.out.println("SQL COMMAND COMPLETE");
+					//deleteOwnbyTable.executeUpdate();
+					//System.out.println("SQL COMMAND COMPLETE");
 					deleteAccountTable.executeUpdate();
 				System.out.println("Delete Completed");
 				}
+				//delete no account customer
+				sql = "SELECT * FROM Customer C ";
+			      PreparedStatement update = conn.prepareStatement(sql);
+			      rs = update.executeQuery();
+			      while(rs.next()) {
+			    	  String tid = rs.getString("TaxID");
+			    		  	Customer c = new Customer(rs.getString("Name"),tid,rs.getString("Address"),rs.getString("PIN"));
+			    			if(c.getList().size()==0) {
+			    				String sql3 = "DELETE FROM Customer C WHERE C.TaxID = '" + tid + "'";
+			    				PreparedStatement deleteOwnbyTable = conn.prepareStatement(sql3);
+			    				deleteOwnbyTable.executeUpdate();
+			    				
+			    			}
+			      }
+			      System.out.println("DELETE CUSTOMER COMPLETE");
 			} catch (Exception ee) {
 				System.out.println(ee);
 			} finally {

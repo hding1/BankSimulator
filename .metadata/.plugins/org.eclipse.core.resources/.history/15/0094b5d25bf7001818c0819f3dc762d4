@@ -1,0 +1,231 @@
+package GUI.BankTellerMonitor;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Calendar;
+import java.util.Random;
+import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+import java.util.*;
+
+import GUI.windows.loginWindow;
+import User.Customer;
+import User.Pocket_account;
+import GUI.windows.SelectWindow;
+import GUI.windows.SignUPWindow;
+import GUI.windows.TWWindow;
+import GUI.windows.BankTellerWindow;
+import GUI.windows.PocketWindow;
+import GUI.windows.SelectAccountWindow;
+import User.*;
+
+import java.sql.*;
+import java.text.SimpleDateFormat;
+
+public class addInterest implements ActionListener {
+	private BankTellerWindow btw;
+
+	/**
+
+	 * @param loginWindow
+	 */
+	
+	static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+	static final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
+
+	static final String USERNAME = "fliang";
+	static final String PASSWORD = "123455";
+	Connection conn = null;
+	Statement stmt = null;
+	String otherAccount;
+	boolean flag;
+	
+
+	
+	public addInterest(BankTellerWindow btw) {
+		this.btw = btw;
+		flag = false;
+	}
+	
+
+
+	//@Override
+	public void actionPerformed(ActionEvent e) {
+		int command = Integer.parseInt(e.getActionCommand());
+		switch (command) {
+		case 1:
+			ArrayList<Saving_account> savinglist = new ArrayList<Saving_account>();
+			ArrayList<Student_check_account> studentlist = new ArrayList<Student_check_account>();
+			ArrayList<Interest_check_account> checkinglist = new ArrayList<Interest_check_account>();
+			try {
+				// STEP 2: Register JDBC driver
+				Class.forName(JDBC_DRIVER);
+
+				// STEP 3: Open a connection
+				System.out.println("Connecting to a selected database...");
+				conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+				System.out.println("Connected database successfully...");
+
+				// STEP 4: Execute a query
+				System.out.println("Creating statement...");
+				stmt = conn.createStatement();
+
+//			    //1. saving case
+				String sql = "SELECT * FROM Account A, Saving B WHERE A.aid = B.aid AND A.open = 1";
+				PreparedStatement update = conn.prepareStatement(sql);
+				ResultSet rs = update.executeQuery();
+			    
+			    while(rs.next()){
+			    	String aid = rs.getString("Aid");
+			    	String taxID = rs.getString("TaxID");
+			    	float amount = rs.getFloat("Amount");
+			    	String branch = rs.getString("Branch");
+			    	char open = rs.getString("Open").charAt(0);
+			    	float ir = rs.getFloat("Interest_rate");
+			    	savinglist.add(new Saving_account(aid,taxID,amount,branch,open,ir));
+			    }
+			    
+			    sql = "SELECT * FROM Account A, Student_Checking B WHERE A.aid = B.aid AND A.open = 1";
+				update = conn.prepareStatement(sql);
+				rs = update.executeQuery();
+				
+				while(rs.next()){
+			    	String aid = rs.getString("Aid");
+			    	String taxID = rs.getString("TaxID");
+			    	float amount = rs.getFloat("Amount");
+			    	String branch = rs.getString("Branch");
+			    	char open = rs.getString("Open").charAt(0);
+			    	float ir = rs.getFloat("Interest_rate");
+			    	studentlist.add(new Student_check_account(aid,taxID,amount,branch,open,ir));
+			    }
+				
+			    sql = "SELECT * FROM Account A, Interest_Checking B WHERE A.aid = B.aid AND A.open = 1";
+				update = conn.prepareStatement(sql);
+				rs = update.executeQuery();
+				
+				while(rs.next()){
+			    	String aid = rs.getString("Aid");
+			    	String taxID = rs.getString("TaxID");
+			    	float amount = rs.getFloat("Amount");
+			    	String branch = rs.getString("Branch");
+			    	char open = rs.getString("Open").charAt(0);
+			    	float ir = rs.getFloat("Interest_rate");
+			    	checkinglist.add(new Interest_check_account(aid,taxID,amount,branch,open,ir));
+			    }
+				boolean flag = true;
+				for(int i=0; i<savinglist.size();i++) {
+					for(int j=0;j<savinglist.get(i).getList().size();j++) {
+						if(savinglist.get(i).getList().get(j).getType().equals("intereset")) {
+							flag = false;
+						}
+					}
+					if(flag) {
+						float interest = savinglist.get(i).getAmount()*savinglist.get(i).getIntere_rate()/100;
+						float amount = savinglist.get(i).getAmount()+interest;
+						sql = "UPDATE Account SET Amount = "+amount+"WHERE Aid = '"+savinglist.get(i).getAccount()+"'";
+						update = conn.prepareStatement(sql);
+						update.executeUpdate();
+						String tid=TIDGenerator(9);
+						String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+						update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+savinglist.get(i).getAccount()+"','" +savinglist.get(i).getAccount()+"','interest'," + interest+")");
+						update.executeUpdate();
+					}
+					flag = true;
+				}
+				for(int i=0; i<studentlist.size();i++) {
+					for(int j=0;j<studentlist.get(i).getList().size();j++) {
+						if(studentlist.get(i).getList().get(j).getType().equals("intereset")) {
+							flag = false;
+						}
+					}
+					if(flag) {
+						float interest = studentlist.get(i).getAmount()*studentlist.get(i).getIntere_rate()/100;
+						float amount = studentlist.get(i).getAmount()+interest;
+						sql = "UPDATE Account SET Amount = "+amount+"WHERE Aid = '"+studentlist.get(i).getAccount()+"'";
+						update = conn.prepareStatement(sql);
+						update.executeUpdate();
+						String tid=TIDGenerator(9);
+						String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+						update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+studentlist.get(i).getAccount()+"','" +studentlist.get(i).getAccount()+"','interest'," + interest+")");
+						update.executeUpdate();
+					}
+					flag = true;
+				}
+				for(int i=0; i<checkinglist.size();i++) {
+					for(int j=0;j<checkinglist.get(i).getList().size();j++) {
+						if(checkinglist.get(i).getList().get(j).getType().equals("intereset")) {
+							flag = false;
+						}
+					}
+					if(flag) {
+						float interest = checkinglist.get(i).getAmount()*checkinglist.get(i).getInterest_rate()/100;
+						float amount = checkinglist.get(i).getAmount()+interest;
+						sql = "UPDATE Account SET Amount = "+amount+"WHERE Aid = '"+checkinglist.get(i).getAccount()+"'";
+						update = conn.prepareStatement(sql);
+						update.executeUpdate();
+						String tid=TIDGenerator(9);
+						String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+						update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+checkinglist.get(i).getAccount()+"','" +checkinglist.get(i).getAccount()+"','interest'," + interest+")");
+						update.executeUpdate();
+					}
+					flag = true;
+				}
+				
+			
+			} catch (SQLException se) {
+				// Handle errors for JDBC
+				se.printStackTrace();
+			} catch (Exception ea) {
+				// Handle errors for Class.forName
+				ea.printStackTrace();
+			} finally {
+				// finally block used to close resources
+				try {
+					if (stmt != null)
+						conn.close();
+				} catch (SQLException se) {
+				} // do nothing
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				} // end finally try
+			}
+
+			break; 
+		case 2:
+//			if(tw.type<3) {
+//			this.tw.setVisible(false);
+//			SelectWindow window = new SelectWindow(this.tw.c,this.tw.a);
+//			window.launchSelectWindow();
+//			}else {
+//				this.tw.setVisible(false);
+//				PocketWindow window = new PocketWindow(this.tw.c,(Pocket_account)this.tw.a);
+//				window.launchSelectWindow();
+//			}
+//			break;
+		}
+		
+		
+	}
+
+	public String TIDGenerator(int type) {
+		String result = Integer.toString(type);
+		Random rand = new Random();
+		for (int i = 0; i < 9; i++) {
+			int rand_int = rand.nextInt(10);
+			result += Integer.toString(rand_int);
+		}
+
+		return result;
+	}
+
+
+}

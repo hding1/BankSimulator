@@ -37,10 +37,10 @@ public class customerReportWindow extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		
-		CustomerName = new JLabel("Customer Name:    " + this.crw.getCname().getText());
+		CustomerName = new JLabel("Customer Name:      " + this.crw.getCname().getText());
 		this.add(CustomerName);
 		
-		JLabel Text = new JLabel("Account ID:       Account Type:    Status:");
+		JLabel Text = new JLabel("Account ID:            Account Type:          Status:");
 		this.add(Text);
 		
 		final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
@@ -83,7 +83,7 @@ public class customerReportWindow extends JFrame{
 		    		  type = "Pocket";
 		    	  }
 		    	  
-		    	  a3.addElement(rs.getString("Aid") + "     " + type + "     " + rs.getString("Open"));
+		    	  a3.addElement(rs.getString("Aid") + "            " + type + "                      " + rs.getString("Open"));
 		    	  
 		      }
 		      
@@ -91,7 +91,7 @@ public class customerReportWindow extends JFrame{
 		      ClosedID.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		      ClosedID.setSelectedIndex(0);
 		      JScrollPane ClosedIDScrollPane = new JScrollPane(ClosedID);
-		      ClosedIDScrollPane.setPreferredSize(new Dimension(250, 300));
+		      ClosedIDScrollPane.setPreferredSize(new Dimension(300, 300));
 		      ClosedIDScrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 		      ClosedIDScrollPane.setAlignmentY(Component.CENTER_ALIGNMENT);
 		      this.add(ClosedIDScrollPane);

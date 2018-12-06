@@ -262,7 +262,7 @@ public class SignUPButtonMonitor implements ActionListener {
 	public String AIDGenerator(int type) {
 		String result = Integer.toString(type);
 		Random rand = new Random();
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 4; i++) {
 			int rand_int = rand.nextInt(10);
 			result += Integer.toString(rand_int);
 		}

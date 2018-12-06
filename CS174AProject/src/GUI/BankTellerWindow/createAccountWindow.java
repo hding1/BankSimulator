@@ -48,7 +48,7 @@ public class createAccountWindow extends JFrame {
 	public void launchCreateAccountWindow() {
 //		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
 		this.setLayout(new FlowLayout());
-		this.setTitle("Create Account");
+		this.setTitle("Create Customer");
 		this.setSize(240, 260);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -57,10 +57,11 @@ public class createAccountWindow extends JFrame {
 
 		JLabel userLabel = new JLabel("Tax ID:          ");
 		JLabel pwdLabel = new JLabel("PIN:               ");
-		JLabel userName = new JLabel("Your Name:   ");
+		JLabel userName = new JLabel("Name:       "
+				+ "    ");
 		JLabel addressName = new JLabel("Address:        ");
-		JLabel firstAccount = new JLabel("----Create Your First Account----");
-		JLabel branchName = new JLabel("Branch:          ");
+		JLabel firstAccount = new JLabel("----Create Customer's Account----");
+		JLabel branchName = new JLabel("Branch:          ");                 
 		JLabel depositAmount = new JLabel("Amount:        ");
 		JLabel typeName = new JLabel("Type:             ");
 
@@ -151,7 +152,7 @@ public class createAccountWindow extends JFrame {
 		this.getContentPane().add(TypeList);
 
 		// Register Button
-		JButton Button1 = new JButton("Register");
+		JButton Button1 = new JButton("Create");
 		Button1.setActionCommand("1");
 		Button1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		Button1.setHorizontalAlignment(SwingConstants.CENTER);

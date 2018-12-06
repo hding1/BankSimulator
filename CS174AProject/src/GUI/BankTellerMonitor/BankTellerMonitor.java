@@ -115,7 +115,7 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 				String sql = "SELECT * FROM Account A, Saving B WHERE A.aid = B.aid AND A.open = 1";
 				PreparedStatement update = conn.prepareStatement(sql);
 				ResultSet rs = update.executeQuery();
-			    
+			    boolean added = false;
 			    while(rs.next()){
 			    	String aid = rs.getString("Aid");
 			    	String taxID = rs.getString("TaxID");
@@ -172,6 +172,7 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+savinglist.get(i).getAccount()+"','" +savinglist.get(i).getAccount()+"','interest'," + interest+")");
 						update.executeUpdate();
 					}else {
+						added = true;
 						System.out.println("Already Added");
 					}
 					flag = true;
@@ -197,6 +198,7 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						update.executeUpdate();
 						
 					}else {
+						added = true;
 						System.out.println("Already Added");
 					}
 					flag = true;
@@ -221,12 +223,16 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+checkinglist.get(i).getAccount()+"','" +checkinglist.get(i).getAccount()+"','interest'," + interest+")");
 						update.executeUpdate();
 					}else {
+						added= true;
 						System.out.println("Already Added");
 					}
 					flag = true;
 				}
-				
-			
+				if(added) {
+					JOptionPane.showMessageDialog(null, "Interest has already added!", "Action Failed!", JOptionPane.PLAIN_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null, "Interest added successfully", "Action Suceed", JOptionPane.PLAIN_MESSAGE);
+				}
 			} catch (SQLException se) {
 				// Handle errors for JDBC
 				se.printStackTrace();

@@ -56,36 +56,13 @@ public class TDMonitor implements ActionListener {
 	//@Override
 	public void actionPerformed(ActionEvent e) {
 		int command = Integer.parseInt(e.getActionCommand());
+
 		switch (command) {
+		
 		case 1:
 			//acount update
 			String typeT = "";
 			float total = this.td.a.getAmount();
-			switch(td.type) {
-			case 1: 
-				typeT = "Deposit";
-				total = this.td.getAmount()+this.td.a.getAmount();
-				break;
-			case 2: 
-				typeT = "Withdraw";
-				total = this.td.a.getAmount()-this.td.getAmount();
-				break;
-			case 3: 
-				typeT = "Top-Up";
-				total = this.td.getAmount()+this.td.a.getAmount();
-				break;
-			case 4: 
-				typeT = "Purchase";
-				total = this.td.a.getAmount()-this.td.getAmount();
-				break;
-			case 5: 
-				typeT = "Collect";
-				total = this.td.a.getAmount()-this.td.getAmount()*1.03f;
-				break;
-		}
-			if(total>=0) {
-			this.td.a.setAmount(total);
-			boolean unique = true;
 			try {
 				// STEP 2: Register JDBC driver
 				Class.forName(JDBC_DRIVER);
@@ -98,10 +75,48 @@ public class TDMonitor implements ActionListener {
 				// STEP 4: Execute a query
 				System.out.println("Creating statement...");
 				stmt = conn.createStatement();
-
+				
+				String sql = "SELECT COUNT(*) AS total FROM Account A, Record_Transaction R WHERE A.Aid = '"+this.td.a.getAccount()+"' AND (R.Aid_1 = '"+this.td.a.getAccount()+"' OR 'R.Aid_2 = '"+this.td.a.getAccount()+"')";
+			    PreparedStatement update = conn.prepareStatement(sql);
+			    ResultSet rs = update.executeQuery();
+			    int count = rs.getInt("total");
+			switch(td.type) {
+			case 1: 
+				typeT = "Deposit";
+				total = this.td.getAmount()+this.td.a.getAmount();
+				break;
+			case 2: 
+				typeT = "Withdraw";
+				total = this.td.a.getAmount()-this.td.getAmount();
+				break;
+			case 3: 
+				typeT = "Top-Up";
+				total = this.td.getAmount()+this.td.a.getAmount();
+				if(count==0) {
+					total +=5;
+				}
+				break;
+			case 4: 
+				typeT = "Purchase";
+				total = this.td.a.getAmount()-this.td.getAmount();
+				if(count==0) {
+					total +=5;
+				}
+				break;
+			case 5: 
+				typeT = "Collect";
+				total = this.td.a.getAmount()-this.td.getAmount()*1.03f;
+				if(count==0) {
+					total +=5;
+				}
+				break;
+		}
+			
+			if(total>=0) {
+			this.td.a.setAmount(total);
+			boolean unique = true;
 //			      createTable(conn);
-				String sql = "SELECT * FROM Customer C Where C.TaxID = "+this.td.c.getTaxID();
-			    ResultSet rs = stmt.executeQuery(sql);
+
 			    
 			    while(rs.next()){
 			    	String pin = rs.getString("PIN");
@@ -134,6 +149,23 @@ public class TDMonitor implements ActionListener {
 			    		JOptionPane.showMessageDialog(null, "Incorrect PIN", "Incorrect PIN", JOptionPane.PLAIN_MESSAGE);
 			    	}
 			    }
+
+			if(flag) {
+
+				JOptionPane.showMessageDialog(null, typeT+" Succeed\nYour current balance is \n$"+total,"Transaction Successful",  JOptionPane.PLAIN_MESSAGE);
+				if(td.type<3) {
+				this.td.setVisible(false);
+				SelectWindow window = new SelectWindow(this.td.c,this.td.a);
+				window.launchSelectWindow();
+				}else {
+					this.td.setVisible(false);
+					PocketWindow window = new PocketWindow(this.td.c,(Pocket_account)this.td.a);
+					window.launchSelectWindow();
+				}
+			}
+			}else {
+				JOptionPane.showMessageDialog(this.td, "Invalid Input\nThis transaction will make balance to go below 0.\nYour "+typeT.toLowerCase()+" amount:"+this.td.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
+			}
 			} catch (SQLException se) {
 				// Handle errors for JDBC
 				se.printStackTrace();
@@ -153,22 +185,6 @@ public class TDMonitor implements ActionListener {
 				} catch (SQLException se) {
 					se.printStackTrace();
 				} // end finally try
-			}
-			if(flag) {
-
-				JOptionPane.showMessageDialog(null, typeT+" Succeed\nYour current balance is \n$"+total,"Transaction Successful",  JOptionPane.PLAIN_MESSAGE);
-				if(td.type<3) {
-				this.td.setVisible(false);
-				SelectWindow window = new SelectWindow(this.td.c,this.td.a);
-				window.launchSelectWindow();
-				}else {
-					this.td.setVisible(false);
-					PocketWindow window = new PocketWindow(this.td.c,(Pocket_account)this.td.a);
-					window.launchSelectWindow();
-				}
-			}
-			}else {
-				JOptionPane.showMessageDialog(this.td, "Invalid Input\nThis transaction will make balance to go below 0.\nYour "+typeT.toLowerCase()+" amount:"+this.td.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
 			}
 			break; 
 		case 2:

@@ -1,9 +1,5 @@
 package GUI.BankTellerWindow;
 
-import java.awt.Component;
-
-import java.awt.Dimension;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +18,7 @@ public class listClosedAccountWindow extends JFrame{
 	public void launchListClosedAccountWindow() {
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
 		this.setTitle("Closed Account");
+		this.setLayout(new FlowLayout());
 		this.setSize(300,280);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -70,6 +67,7 @@ public class listClosedAccountWindow extends JFrame{
 		      ClosedID.setSelectedIndex(0);
 		      ClosedID.setVisibleRowCount(3); 
 		      JScrollPane ClosedIDScrollPane = new JScrollPane(ClosedID); 
+		      ClosedIDScrollPane.setPreferredSize(new Dimension(280, 200));
 		      this.add(ClosedIDScrollPane);
 		      JButton backButton = new JButton("Back");
 		      listClosedAccountMonitor lcam = new listClosedAccountMonitor(this);

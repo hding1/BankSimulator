@@ -15,4 +15,5 @@ public class customerReportMonitor implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		this.crw.setVisible(false);
 	}
+	
 }

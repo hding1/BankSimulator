@@ -2,12 +2,16 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="close" key="selection"/>
+		<item value="String" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="int"/>
+			<item value="TransactionID"/>
+			<item value="Account_2_ID"/>
+			<item value="Account_1_ID"/>
 			<item value="close"/>
 			<item value="rs"/>
 			<item value="invalid"/>
@@ -19,12 +23,12 @@
 			<item value="own"/>
 			<item value="SignUP"/>
 			<item value="createing"/>
-			<item value="create"/>
-			<item value="isValid"/>
-			<item value="set"/>
-			<item value="branchName"/>
 		</list>
 		<list key="replacehistory">
+			<item value="String"/>
+			<item value="tid"/>
+			<item value="Aid2"/>
+			<item value="Aid1"/>
 			<item value="tw"/>
 			<item value="addressName"/>
 			<item value="SignUPWindow"/>
@@ -35,7 +39,7 @@
 		<item value="290" key="DIALOG_WIDTH"/>
 		<item value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont" key="DIALOG_FONT_NAME"/>
 		<item value="409" key="DIALOG_HEIGHT"/>
-		<item value="832" key="DIALOG_X_ORIGIN"/>
-		<item value="124" key="DIALOG_Y_ORIGIN"/>
+		<item value="887" key="DIALOG_X_ORIGIN"/>
+		<item value="232" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

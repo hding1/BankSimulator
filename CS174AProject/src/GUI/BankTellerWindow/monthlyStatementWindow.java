@@ -17,13 +17,14 @@ public class monthlyStatementWindow extends JFrame{
 	final String PASSWORD = "123455";
 	
 	Connection conn = null;
-	Statement stmt = null;
+	Statement stmt, stmt2, stmt3 = null;
 	
 	public void launchMonthlyStatementWindow(generateMonthlyStatementWindow gmsw) {
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
-		this.setTitle("Closed Account");
-		this.setSize(370,400);
+		this.setTitle("Monthly Statement");
+		this.setSize(400,600);
 		this.setResizable(false);
+		this.setLayout(new FlowLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		
@@ -44,13 +45,16 @@ public class monthlyStatementWindow extends JFrame{
 		      //STEP 4: Execute a query
 		      System.out.println("Creating statement...");
 		      stmt = conn.createStatement();
-
+		      stmt2 = conn.createStatement();
+		      stmt3 = conn.createStatement();
 
 		      String sql_allAccount = "SELECT O.Aid FROM Own_by O INNER JOIN Customer C ON C.Name = '" + gmsw.getCname().getText() + "' AND O.TaxID = C.TaxID";
 		      
-		      
 		      ResultSet rs = stmt.executeQuery(sql_allAccount);
 		      while(rs.next()){
+		    	  
+		    	  System.out.println(rs.getString("Aid"));
+		    	  
 		    	  String type = "";
 		    	  if(rs.getString("Aid").substring(0,1).equals("1")) {
 		    		  type = "Student Checking";
@@ -67,10 +71,13 @@ public class monthlyStatementWindow extends JFrame{
 		    	  
 		    	  
 			      final DefaultListModel a3 = new DefaultListModel();
+			      a3.addElement("Name:      " + "Address:");
+			     
 			      
 			      String sql_getCustomerNameAndAddress = "SELECT C.Name, C.Address FROM Customer C INNER JOIN Own_by O ON O.Aid = '" + rs.getString("Aid") + "' AND O.TaxID = C.TaxID";
-		    	  
-			      ResultSet rs2 = stmt.executeQuery(sql_getCustomerNameAndAddress);
+			      String getTransaction = "SELECT T.Tid, T.TypeTransaction, T.Amount FROM Record_Transaction T WHERE T.Aid_2 = '" + rs.getString("Aid") + "'";
+			      
+			      ResultSet rs2 = stmt2.executeQuery(sql_getCustomerNameAndAddress);
 			      while(rs2.next()) {
 			    	  a3.addElement(rs2.getString("Name") + "      " + rs2.getString("Address"));
 			      }
@@ -79,8 +86,7 @@ public class monthlyStatementWindow extends JFrame{
 			      ListCustomer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			      ListCustomer.setSelectedIndex(0);
 			      JScrollPane ListCustomerPane = new JScrollPane(ListCustomer);
-			     // ListCustomerPane.setPreferredSize(new Dimension(50, 200));
-			      ListCustomerPane.setMaximumSize(new Dimension(100, 200));
+			      ListCustomerPane.setPreferredSize(new Dimension(300, 200));
 			      ListCustomerPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 			      ListCustomerPane.setAlignmentY(Component.CENTER_ALIGNMENT);
 			      this.add(ListCustomerPane);
@@ -88,17 +94,19 @@ public class monthlyStatementWindow extends JFrame{
 			      JLabel Transaction = new JLabel("All Transactions:     ");
 			      this.add(Transaction);
 			      
-			      String sql_getTransaction = "SELECT T.Tid, T.TypeTransaction, T.Amount FROM Record_Transaction T WHERE T.Aid_1 = '" + rs.getString("Aid") + "'";
+			      
+			      
+
 			      final DefaultListModel a4 = new DefaultListModel();
-			      ResultSet rs3 = stmt.executeQuery(sql_getCustomerNameAndAddress);
+			      ResultSet rs3 = stmt3.executeQuery(getTransaction);
 			      while(rs3.next()) {
 			    	  a4.addElement("Tid:    " + rs3.getString("Tid") + "   Type:    " + rs3.getString("TypeTransaction") + "     Amount:    " + rs3.getString("Amount"));
 			      }
 			      final JList ListType = new JList(a4);
 			      ListType.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			      ListType.setSelectedIndex(0);
+			      ListType.setSelectedIndex(1);
 			      JScrollPane ListTypePane = new JScrollPane(ListType);
-			      ListTypePane.setPreferredSize(new Dimension(50, 200));
+			      ListTypePane.setPreferredSize(new Dimension(370, 200));
 			      ListTypePane.setAlignmentX(Component.CENTER_ALIGNMENT);
 			      ListTypePane.setAlignmentY(Component.CENTER_ALIGNMENT);
 			      this.add(ListTypePane);

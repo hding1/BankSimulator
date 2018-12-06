@@ -58,7 +58,7 @@ public class SelectAccountMonitor implements ActionListener {
 		int command = Integer.parseInt(a.getActionCommand());
 		switch (command) {
 		case 1:
-			if(saw.getAccount().getAccount().charAt(0)!='4') {
+			if(! (saw.getAccount() instanceof Pocket_account)) {
 				this.saw.setVisible(false);
 				SelectWindow sw = new SelectWindow(saw.getCustomer(),saw.getAccount());
 				sw.launchSelectWindow();
@@ -67,7 +67,6 @@ public class SelectAccountMonitor implements ActionListener {
 				this.saw.setVisible(false);
 				PocketWindow pw = new PocketWindow(saw.getCustomer(),(Pocket_account)saw.getAccount());
 				pw.launchSelectWindow();
-				
 			}
 			break;
 		case 2:
