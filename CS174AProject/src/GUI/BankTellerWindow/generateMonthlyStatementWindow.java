@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +23,9 @@ public class generateMonthlyStatementWindow extends JFrame{
 	}
 
 	public void launchMonthlyStatementWindow() {
+
+		
+		
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
 		this.setLayout(new FlowLayout());
 		this.setTitle("");
@@ -30,7 +34,7 @@ public class generateMonthlyStatementWindow extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		
-		JLabel CustomerName = new JLabel("Enter Customer Name:");
+		JLabel CustomerName = new JLabel("Enter Customer TaxID:");
 		this.add(CustomerName);
 		this.cname = new JTextField();
 		Dimension dim = new Dimension(300, 30);

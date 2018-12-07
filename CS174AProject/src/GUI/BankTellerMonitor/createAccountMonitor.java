@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 
 import GUI.windows.loginWindow;
 import User.Customer;
+import GUI.windows.BankTellerWindow;
 import GUI.windows.SelectAccountWindow;
 import GUI.BankTellerWindow.*;
 
@@ -31,7 +32,7 @@ import java.sql.*;
 public class createAccountMonitor implements ActionListener {
 	private createAccountWindow caw;
 	private Customer c;
-
+	private String LinkedAID;
 	final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
 
@@ -60,7 +61,7 @@ public class createAccountMonitor implements ActionListener {
 			try {
 				// STEP 2: Register JDBC driver
 				Class.forName(JDBC_DRIVER);
-
+				
 				// STEP 3: Open a connection
 				System.out.println("Connecting to a selected database...");
 				conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
@@ -71,9 +72,43 @@ public class createAccountMonitor implements ActionListener {
 				stmt = conn.createStatement();
 
 //			      createTable(conn);
-
-				insertCustomer(conn);
+				String type1 = this.caw.getAccountType();
+				if(type1.equals("Pocket")) {
+					String sql = "SELECT * FROM Customer C Where C.TaxID = "+this.caw.getUserID();
+	  			      PreparedStatement update = conn.prepareStatement(sql);
+	  			      ResultSet rs = update.executeQuery();
+	  			      if(rs.next()) {
+	  			    	  String pin = rs.getString("PIN");
+	  			    	  if(pin.equals(this.caw.getPIN())) {
+	  			    		  	c = new Customer(rs.getString("Name"),rs.getString("TaxID"),rs.getString("Address"),rs.getString("PIN"));
+	  			    		  	
+	  			    	  }else {
+	  			    		  JOptionPane.showMessageDialog(null, "Incorrect Password!", "Incorrect Password!", JOptionPane.PLAIN_MESSAGE);
+	  			    	  }
+	  			      }else {
+	  			    	  JOptionPane.showMessageDialog(null, "Account " + this.caw.getUserID() + " does not exist!", "", JOptionPane.PLAIN_MESSAGE);
+	  			      }
+	  			    Object[] possibilities = c.getSACID();
+	  			    if(possibilities.length==0) {
+	  			    	JOptionPane.showMessageDialog(null, "No Account to be Linked!", "Error", JOptionPane.PLAIN_MESSAGE);
+	  			    	break;
+	  			    }
+	                String s = (String)JOptionPane.showInputDialog(
+	                                    caw,
+	                                    "Select a Account to Link",
+	                                    "Link",
+	                                    JOptionPane.PLAIN_MESSAGE,
+	                                    null,
+	                                    possibilities,possibilities[0]
+	                                    );
+	                if ((s != null) && (s.length() > 0)) {
+	                    LinkedAID = s;
+	                }
+	                System.out.println("ok");
+				}
+				System.out.println("test1");
 				if (flag) {
+					System.out.println("test2");
 					insertAccount(conn);
 				}
 			} catch (SQLException se) {
@@ -121,29 +156,29 @@ public class createAccountMonitor implements ActionListener {
 		}
 	}
 
-	public void insertCustomer(Connection conn) throws Exception {
-		String new_id = this.caw.getUserID();
-		String new_pin = String.valueOf(this.caw.getPIN());
-		String new_name = this.caw.getPname();
-		String new_address = this.caw.getaddress();
-		try {
-			PreparedStatement insert = conn
-					.prepareStatement("INSERT INTO Customer (Name, TaxID, Address, PIN) VALUES ('" + new_name + "', '"
-							+ new_id + "','" + new_address + "','" + new_pin + "')");
-			insert.executeUpdate();
-		} catch (Exception e) {
-			System.out.println(e);
-
-			createAccountWindow lw1 = new createAccountWindow();
-			lw1.launchCreateAccountWindow();
-			this.flag = false;
-			JOptionPane.showMessageDialog(this.caw, "Invalid Input", "Invalid Input",
-					JOptionPane.ERROR_MESSAGE);
-			this.caw.setVisible(false);
-		} finally {
-			System.out.println("insert Customer completed!");
-		}
-	}
+//	public void insertCustomer(Connection conn) throws Exception {
+//		String new_id = this.caw.getUserID();
+//		String new_pin = String.valueOf(this.caw.getPIN());
+//		String new_name = this.caw.getPname();
+//		String new_address = this.caw.getaddress();
+//		try {
+//			PreparedStatement insert = conn
+//					.prepareStatement("INSERT INTO Customer (Name, TaxID, Address, PIN) VALUES ('" + new_name + "', '"
+//							+ new_id + "','" + new_address + "','" + new_pin + "')");
+//			insert.executeUpdate();
+//		} catch (Exception e) {
+//			System.out.println(e);
+//
+//			createAccountWindow lw1 = new createAccountWindow();
+//			lw1.launchCreateAccountWindow();
+//			this.flag = false;
+//			JOptionPane.showMessageDialog(this.caw, "Invalid Input", "Invalid Input",
+//					JOptionPane.ERROR_MESSAGE);
+//			this.caw.setVisible(false);
+//		} finally {
+//			System.out.println("insert Customer completed!");
+//		}
+//	}
 
 	public void insertAccount(Connection conn) throws Exception {
 		String new_id = this.caw.getUserID();
@@ -151,23 +186,23 @@ public class createAccountMonitor implements ActionListener {
 		float initialAmount = this.caw.getAmount();
 		String type1 = this.caw.getAccountType();
 		String new_pin = String.valueOf(this.caw.getPIN());
-		String new_name = this.caw.getPname();
-		String new_address = this.caw.getaddress();
+//		String new_name = this.caw.getPname();
+//		String new_address = this.caw.getaddress();
 		System.out.print(type1);
 		if (!(initialAmount > 0)) {
 			JOptionPane.showMessageDialog(this.caw, "You must have a positive initial deposit.",
 					"Initial Deposit", JOptionPane.ERROR_MESSAGE);
 		} else {
 			boolean unique = true;
-			switch (type1) {
-			case "Student_check":
+			switch (type1.replaceAll(" ","")) {
+			case "Student-Checking":
 
 				while (unique) {
 					try {
 						String account_id = AIDGenerator(1);
 						PreparedStatement insert = conn.prepareStatement(
-								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open) VALUES ('" + account_id + "', '"
-										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1')");
+								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open,Type) VALUES ('" + account_id + "', '"
+										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1','Student-Checking')");
 						insert.executeUpdate();
 						System.out.println("Insert Account completed!");
 						insert = conn.prepareStatement(
@@ -178,9 +213,10 @@ public class createAccountMonitor implements ActionListener {
 								.prepareStatement("INSERT INTO Student_Checking (Aid) VALUES ('" + account_id + "')");
 						insert.executeUpdate();
 						System.out.println("Insert Student_Checking completed!");
-						c = new Customer(new_name,new_id,new_address,new_pin);
-						SelectAccountWindow lw = new SelectAccountWindow(c);
-						lw.launchSelectwindow();
+						insert = conn.prepareStatement("INSERT INTO initialAmount(Aid, Amount) VALUES('"+ account_id +"',"+initialAmount+")");
+						insert.executeUpdate();
+						BankTellerWindow lw = new BankTellerWindow();
+						lw.launchBankTellerWindow();
 						unique = false;
 						this.caw.setVisible(false);
 					} catch (java.sql.SQLIntegrityConstraintViolationException e) {
@@ -191,14 +227,14 @@ public class createAccountMonitor implements ActionListener {
 				}
 				break;
 
-			case "Interest_check":
+			case "Interest-Checking":
 				while (unique) {
 					try {
 
 						String account_id = AIDGenerator(2);
 						PreparedStatement insert = conn.prepareStatement(
-								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open) VALUES ('" + account_id + "', '"
-										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1')");
+								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open,Type) VALUES ('" + account_id + "', '"
+										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1','Interest-Checking')");
 
 						insert.executeUpdate();
 						insert = conn.prepareStatement(
@@ -207,11 +243,12 @@ public class createAccountMonitor implements ActionListener {
 						insert = conn.prepareStatement("INSERT INTO Interest_Checking (Aid,Interest_rate) VALUES ('"
 								+ account_id + "'," + 5.5 + ")");
 						insert.executeUpdate();
+						insert = conn.prepareStatement("INSERT INTO initialAmount(Aid, Amount) VALUES('"+ account_id +"',"+initialAmount+")");
+						insert.executeUpdate();
 						System.out.println("Insert completed!");
 						unique = false;
-						c = new Customer(new_name,new_id,new_address,new_pin);
-						SelectAccountWindow lw = new SelectAccountWindow(c);
-						lw.launchSelectwindow();
+						BankTellerWindow lw = new BankTellerWindow();
+						lw.launchBankTellerWindow();
 						this.caw.setVisible(false);
 					} catch (Exception e) {
 						System.out.println(e);
@@ -221,13 +258,13 @@ public class createAccountMonitor implements ActionListener {
 				}
 				break;
 
-			case "Saving":
+			case "Savings":
 				while (unique) {
 					try {
 						String account_id = AIDGenerator(3);
 						PreparedStatement insert = conn.prepareStatement(
-								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open) VALUES ('" + account_id + "', '"
-										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1')");
+								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open,Type) VALUES ('" + account_id + "', '"
+										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1','Savings')");
 
 						insert.executeUpdate();
 						insert = conn.prepareStatement(
@@ -236,11 +273,12 @@ public class createAccountMonitor implements ActionListener {
 						insert = conn.prepareStatement(
 								"INSERT INTO Saving (Aid,Interest_rate) VALUES ('" + account_id + "'," + 7.5 + ")");
 						insert.executeUpdate();
+						insert = conn.prepareStatement("INSERT INTO initialAmount(Aid, Amount) VALUES('"+ account_id +"',"+initialAmount+")");
+						insert.executeUpdate();
 						System.out.println("Insert completed!");
 						
-						c = new Customer(new_name,new_id,new_address,new_pin);
-						SelectAccountWindow lw = new SelectAccountWindow(c);
-						lw.launchSelectwindow();
+						BankTellerWindow lw = new BankTellerWindow();
+						lw.launchBankTellerWindow();
 						unique = false;
 						this.caw.setVisible(false);
 					} catch (Exception e) {
@@ -250,7 +288,37 @@ public class createAccountMonitor implements ActionListener {
 					}
 				}
 				break;
+			case "Pocket":
+				while (unique) {
+					try {
+						String account_id = AIDGenerator(4);
+						PreparedStatement insert = conn.prepareStatement(
+								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open,Type) VALUES ('" + account_id + "', '"
+										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1','Pocket')");
 
+						insert.executeUpdate();
+						insert = conn.prepareStatement(
+								"INSERT INTO Own_by (TaxID, Aid) VALUES ('" + new_id + "', '" + account_id + "')");
+						insert.executeUpdate();
+						insert = conn.prepareStatement(
+								"INSERT INTO Pocket (Aid,Link_aid) VALUES ('" + account_id + "','" + LinkedAID + "')");
+						insert.executeUpdate();
+						insert = conn.prepareStatement("INSERT INTO initialAmount(Aid, Amount) VALUES('"+ account_id +"',"+initialAmount+")");
+						insert.executeUpdate();
+						System.out.println("Insert completed!");
+						
+						BankTellerWindow lw = new BankTellerWindow();
+						lw.launchBankTellerWindow();
+
+						unique = false;
+						this.caw.setVisible(false);
+					} catch (Exception e) {
+						System.out.println(e);
+					} finally {
+						System.out.println("funcion completed!");
+					}
+				}
+				break;
 			}
 
 		}
@@ -259,7 +327,7 @@ public class createAccountMonitor implements ActionListener {
 	public String AIDGenerator(int type) {
 		String result = Integer.toString(type);
 		Random rand = new Random();
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 4; i++) {
 			int rand_int = rand.nextInt(10);
 			result += Integer.toString(rand_int);
 		}

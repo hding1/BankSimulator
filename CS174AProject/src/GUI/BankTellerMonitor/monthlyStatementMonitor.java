@@ -1,6 +1,8 @@
 package GUI.BankTellerMonitor;
 
 import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
+
 import java.awt.event.ActionListener;
 import GUI.BankTellerWindow.*;
 

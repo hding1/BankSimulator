@@ -59,6 +59,7 @@ public class TWMonitor implements ActionListener {
 		int command = Integer.parseInt(e.getActionCommand());
 		switch (command) {
 		case 1:
+			if(tw.a.getStatus()!='0') {
 			//acount update
 			String typeT = "";
 			float total = 0;
@@ -92,7 +93,7 @@ public class TWMonitor implements ActionListener {
 			}
 			
 			if(total>=0) {
-			this.tw.a.setAmount(total);
+			
 			try {
 				// STEP 2: Register JDBC driver
 				Class.forName(JDBC_DRIVER);
@@ -148,6 +149,7 @@ public class TWMonitor implements ActionListener {
 			}
 			if(flag) {
 				if(tw.type<3) {
+				this.tw.a.setAmount(total);
 				JOptionPane.showMessageDialog(null, typeT+" Succeed\nYour current balance is \n$"+total,"Transaction Successful",  JOptionPane.PLAIN_MESSAGE);
 				this.tw.setVisible(false);
 				SelectWindow window = new SelectWindow(this.tw.c,this.tw.a);
@@ -160,7 +162,13 @@ public class TWMonitor implements ActionListener {
 				}
 			}
 			}else {
+				this.tw.setVisible(false);
+				TWWindow window = new TWWindow(this.tw.c,(Pocket_account)this.tw.a,tw.type);
+				window.launchWindow();
 				JOptionPane.showMessageDialog(this.tw, "Invalid Input\nThis transaction will make balance to go below 0.\nYour "+typeT.toLowerCase()+" amount:"+this.tw.getAmount(),"Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
+			}
+			}else {
+				JOptionPane.showMessageDialog(this.tw, "Transaction Failed\n This account is currently closed.","Transaction Failed",  JOptionPane.PLAIN_MESSAGE);
 			}
 			break; 
 		case 2:
@@ -202,15 +210,15 @@ public class TWMonitor implements ActionListener {
 			switch(tw.type) {
 			case 1:
 				tid+=TIDGenerator(3);
-				typeT = "transfer";
+				typeT = "Transfer";
 				break;
 			case 2:
 				tid+=TIDGenerator(4);
-				typeT = "wire";
+				typeT = "Wire";
 				break;
 			case 3:
 				tid+=TIDGenerator(8);
-				typeT = "pay-friend";
+				typeT = "Pay-Friend";
 			}
 			String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
 			update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+this.tw.a.getAccount()+"','" +this.otherAccount+"','"+ typeT +"'," + this.tw.getAmount()+")");

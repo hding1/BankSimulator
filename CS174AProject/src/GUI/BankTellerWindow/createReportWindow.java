@@ -30,7 +30,7 @@ public class createReportWindow extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		
-		JLabel CustomerName = new JLabel("Enter Customer Name:");
+		JLabel CustomerName = new JLabel("Enter Customer TaxID:");
 		this.add(CustomerName);
 		this.cname = new JTextField();
 		Dimension dim = new Dimension(300, 30);

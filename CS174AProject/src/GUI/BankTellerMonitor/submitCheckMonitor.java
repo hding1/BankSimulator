@@ -98,14 +98,17 @@ public class submitCheckMonitor implements ActionListener {
 		      date = date.substring(6, 10) + date.substring(3, 5) + date.substring(0, 2);
 		      System.out.println(date);
 		      
-		      String sql_insert= "INSERT INTO Record_Transaction(Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount) VALUES ('" + Tid + "', '" + date + "', '" + this.scw.getCheckAid() + "', '" + this.scw.getCheckAid() + "' , 'check', '" + this.scw.getCheckAmount() + "' )";
+		      String sql_insert= "INSERT INTO Record_Transaction(Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount) VALUES ('" + Tid + "', '" + date + "', '" + this.scw.getCheckAid() + "', '" + this.scw.getCheckAid() + "' , 'Check', '" + this.scw.getCheckAmount() + "' )";
 		      PreparedStatement insert = conn.prepareStatement(sql_insert);
 		      insert.executeUpdate();
 		      String sql_subtract = "UPDATE Account A SET A.Amount = A.Amount - " + this.scw.getCheckAmount();
 		      PreparedStatement subtract = conn.prepareStatement(sql_subtract);
 		      subtract.executeUpdate();
+		      String sql_insertCheck = "INSERT INTO CheckTransaction( Tid, Aid, CheckNum) VALUES ( '" + Tid + "', '" + this.scw.getCheckAid() + "', '" + this.scw.getCheckNum() + "'";
+		      PreparedStatement insertCheck = conn.prepareStatement(sql_insertCheck);
+		      insertCheck.executeUpdate();
 		      System.out.println("check succeeded! ");
-
+		     
 		      
 		      JOptionPane.showMessageDialog(null, "Check Transaction Completed! ", "", JOptionPane.PLAIN_MESSAGE);
 		      this.scw.setVisible(false);

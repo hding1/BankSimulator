@@ -67,21 +67,15 @@ public class customerReportWindow extends JFrame{
 
 		      System.out.println(this.crw.getCname().getText());
 
-		      String sql = "SELECT A.Aid, A.Open FROM Account A, Customer C WHERE A.TaxID = C.TaxID AND C.Name = '" + this.crw.getCname().getText() + "'";
+		      //String sql = "SELECT A.Aid, A.Type, A.Open FROM Account A, Customer C WHERE A.TaxID = C.TaxID AND C.Name = '" + this.crw.getCname().getText() + "'";
+		      String sql = "SELECT O.Aid, A.Type, A.Open FROM Own_by O INNER JOIN Customer C ON C.TaxID = '" + this.crw.getCname().getText() + "' AND O.TaxID = C.TaxID INNER JOIN Account A ON O.Aid = A.Aid";
 		      final DefaultListModel a3 = new DefaultListModel();
+		      System.out.println("succeed");
 		      
 		      ResultSet rs = stmt.executeQuery(sql);
 		      while(rs.next()){
 		    	  String type = "";
-		    	  if(rs.getString("Aid").substring(0,1).equals("1")) {
-		    		  type = "Student Checking";
-		    	  }else if(rs.getString("Aid").substring(0,1).equals("2")) {
-		    		  type = "Interest Checking";
-		    	  }else if(rs.getString("Aid").substring(0,1).equals("3")) {
-		    		  type = "Saving";
-		    	  }else if(rs.getString("Aid").substring(0,1).equals("4")) {
-		    		  type = "Pocket";
-		    	  }
+		    	  type = rs.getString("Type");
 		    	  
 		    	  a3.addElement(rs.getString("Aid") + "            " + type + "                      " + rs.getString("Open"));
 		    	  

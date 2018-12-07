@@ -6,6 +6,8 @@ import java.awt.*;
 import javax.swing.*;
 import java.sql.*;
 import GUI.BankTellerMonitor.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DTERWindow extends JFrame{
 	
@@ -54,30 +56,30 @@ public class DTERWindow extends JFrame{
 		      
 		      while(rs.next()){
 		    	  
-		    	  System.out.println(rs.getString("TaxID"));
+
 		    	  float amount = 0;
 		    	  
-		    	  String sql_getAmount = "SELECT T.Tid, T.Amount FROM Record_Transaction T INNER JOIN Own_by O ON T.Aid_1 = O.Aid AND O.TaxID = '" + rs.getString("TaxID") + "'";
-		    	  String sql_getAmount2 = "SELECT T.Tid, T.Amount FROM Record_Transaction T INNER JOIN Own_by O ON T.Aid_2 = O.Aid AND O.TaxID = '" + rs.getString("TaxID") + "'";
+		    	  String sql_getAmount = "SELECT T.Tid, T.Amount, T.TypeTransaction FROM Record_Transaction T INNER JOIN Own_by O ON T.Aid_1 = O.Aid AND O.TaxID = '" + rs.getString("TaxID") + "'";
+		    	  String sql_getAmount2 = "SELECT T.Tid, T.Amount, T.TypeTransaction FROM Record_Transaction T INNER JOIN Own_by O ON T.Aid_2 = O.Aid AND O.TaxID = '" + rs.getString("TaxID") + "'";
 		    	  
 		    	  ResultSet rs2 = stmt2.executeQuery(sql_getAmount);
 		    	  ResultSet rs3 = stmt3.executeQuery(sql_getAmount2);
 		    	  
-		    	  while(rs2.next()) {
-		    		  if(rs2.getString("Tid").substring(0, 1) == "1") {
+		    	  while(rs3.next()) {
+		    		  String type = rs3.getString("TypeTransaction").replaceAll(" ", "");
+		    		  if(type.equals("deposit") || type.equals("transfer") || type.equals("wire"))  {
 		    			  amount += Float.parseFloat(rs2.getString("Amount"));
 		    		  }
 		    	  }
 		    	  
-		    	 /* while(rs3.next()) {
-		    		  if(rs3.getString("Tid").substring(0, 1) == "3" || rs3.getString("Tid").substring(0, 1) == "4") {
-		    			  amount += Float.parseFloat(rs2.getString("Amount"));
-		    		  }
-		    	  }*/
+		    	  while(rs3.next()) {
+		    		  String type = rs.getString("type").replaceAll(" ", "");
+		    	  }
+		    	  
+		    	 
 		    	  
 		    	  if(amount > 10000) {
-		    		  a3.addElement(rs.getString("Name"));
-		    		  System.out.println(rs.getString("Name"));
+		    		  a3.addElement(rs.getString("Name") );
 		    	  }
 		      }
 		      rs.close();
@@ -90,6 +92,11 @@ public class DTERWindow extends JFrame{
 		      ListCustomerPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 		      ListCustomerPane.setAlignmentY(Component.CENTER_ALIGNMENT);
 		      this.add(ListCustomerPane);
+		      
+		      JButton back = new JButton("back");
+		      DTERWindowMonitor dw = new DTERWindowMonitor(this);
+		      back.addActionListener(dw);
+		      this.add(back);
 		      
 		      
 	    } catch (SQLException se) {

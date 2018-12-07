@@ -163,14 +163,14 @@ public class SignUPButtonMonitor implements ActionListener {
 		} else {
 			boolean unique = true;
 			switch (type1) {
-			case "Student_check":
+			case "Student-Checking":
 
 				while (unique) {
 					try {
 						String account_id = AIDGenerator(1);
 						PreparedStatement insert = conn.prepareStatement(
-								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open) VALUES ('" + account_id + "', '"
-										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1')");
+								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open, Type) VALUES ('" + account_id + "', '"
+										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1','Student-Checking')");
 						insert.executeUpdate();
 						System.out.println("Insert Account completed!");
 						insert = conn.prepareStatement(
@@ -178,9 +178,11 @@ public class SignUPButtonMonitor implements ActionListener {
 						insert.executeUpdate();
 						System.out.println("Insert Own_by completed!");
 						insert = conn
-								.prepareStatement("INSERT INTO Student_Checking (Aid) VALUES ('" + account_id + "')");
+								.prepareStatement("INSERT INTO Student_Checking (Aid, Interest_rate) VALUES ('" + account_id + "',0)");
 						insert.executeUpdate();
 						System.out.println("Insert Student_Checking completed!");
+						insert = conn.prepareStatement("INSERT INTO initialAmount(Aid, Amount) VALUES('"+ account_id +"',"+initialAmount+")");
+						insert.executeUpdate();
 						c = new Customer(new_name,new_id,new_address,new_pin);
 						SelectAccountWindow lw = new SelectAccountWindow(c);
 						lw.launchSelectwindow();
@@ -194,14 +196,14 @@ public class SignUPButtonMonitor implements ActionListener {
 				}
 				break;
 
-			case "Interest_check":
+			case "Interest-Checking":
 				while (unique) {
 					try {
 
 						String account_id = AIDGenerator(2);
 						PreparedStatement insert = conn.prepareStatement(
-								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open) VALUES ('" + account_id + "', '"
-										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1')");
+								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open, Type) VALUES ('" + account_id + "', '"
+										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1','Interest-Checking')");
 
 						insert.executeUpdate();
 						insert = conn.prepareStatement(
@@ -209,8 +211,11 @@ public class SignUPButtonMonitor implements ActionListener {
 						insert.executeUpdate();
 						insert = conn.prepareStatement("INSERT INTO Interest_Checking (Aid,Interest_rate) VALUES ('"
 								+ account_id + "'," + 5.5 + ")");
+						
 						insert.executeUpdate();
 						System.out.println("Insert completed!");
+						insert = conn.prepareStatement("INSERT INTO initialAmount(Aid, Amount) VALUES('"+ account_id +"',"+initialAmount+")");
+						insert.executeUpdate();
 						unique = false;
 						c = new Customer(new_name,new_id,new_address,new_pin);
 						SelectAccountWindow lw = new SelectAccountWindow(c);
@@ -224,13 +229,13 @@ public class SignUPButtonMonitor implements ActionListener {
 				}
 				break;
 
-			case "Saving":
+			case "Savings":
 				while (unique) {
 					try {
 						String account_id = AIDGenerator(3);
 						PreparedStatement insert = conn.prepareStatement(
-								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open) VALUES ('" + account_id + "', '"
-										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1')");
+								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open,Type) VALUES ('" + account_id + "', '"
+										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1','Savings')");
 
 						insert.executeUpdate();
 						insert = conn.prepareStatement(
@@ -238,6 +243,8 @@ public class SignUPButtonMonitor implements ActionListener {
 						insert.executeUpdate();
 						insert = conn.prepareStatement(
 								"INSERT INTO Saving (Aid,Interest_rate) VALUES ('" + account_id + "'," + 7.5 + ")");
+						insert.executeUpdate();
+						insert = conn.prepareStatement("INSERT INTO initialAmount(Aid, Amount) VALUES('"+ account_id +"',"+initialAmount+")");
 						insert.executeUpdate();
 						System.out.println("Insert completed!");
 						

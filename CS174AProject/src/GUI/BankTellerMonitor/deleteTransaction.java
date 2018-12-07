@@ -40,6 +40,13 @@ public class deleteTransaction {
 				PreparedStatement deleteTransactions = conn.prepareStatement(sql);
 				deleteTransactions.executeUpdate();
 				System.out.println("Delete Transaction Completed");
+				String sql_2 = "SELECT A.Amount A.Aid FROM Account A";
+				ResultSet rs = stmt.executeQuery(sql_2);
+				while(rs.next()) {
+					String sql_3 = "UPDATE initialAmount I SET I.Amount = '" + rs.getString("Amount") + "' WHERE I.Aid = '" + rs.getString("Aid") + "'";
+					PreparedStatement updateAmount = conn.prepareStatement(sql_3);
+					updateAmount.executeUpdate();
+				}
 
 			} catch (Exception ee) {
 				System.out.println(ee);

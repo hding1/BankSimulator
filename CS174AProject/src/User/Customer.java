@@ -55,8 +55,14 @@ public class Customer {
 			ResultSet rs = accountQuery.executeQuery();
 			while(rs.next()) {
 				String aid = rs.getString("Aid");
-	            Accounts.add(getAccount(aid));
-	            System.out.println(aid); 
+				query = "SELECT * FROM Account A WHERE A.Aid = '"+aid+"'";
+				accountQuery = conn.prepareStatement(query);
+				ResultSet rs1 = accountQuery.executeQuery();
+				if(rs1.next()) {
+					String type = rs1.getString("Type");
+					System.out.println(type);
+					Accounts.add(getAccount(aid,type.replaceAll(" ","")));
+				}
 	            System.out.println("pull account complete");
 	        }
 		} catch (SQLException se) {
@@ -87,7 +93,15 @@ public class Customer {
 		}
 		return result;
 	}
-	 
+	public String[] getSACID() {
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i = 0;i<Accounts.size();i++) {
+			if(!(Accounts.get(i) instanceof Pocket_account)) {
+				list.add(Accounts.get(i).getAccount());
+			}
+		}
+		return list.toArray(new String[list.size()]);
+	}
 	public String getName() {
 		return this.Name;
 	}
@@ -120,29 +134,29 @@ public class Customer {
 		this.Pin = Pin;
 	}
 	
-	private Account getAccount(String aid) {
+	private Account getAccount(String aid,String type) {
 		try {
 			String query = "";
 			ResultSet rs;
-			if(aid.charAt(0)=='1') {
+			if(type.equals("Student-Checking")) {
 				query = "SELECT * From Account A, Student_Checking S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
 				rs = stmt.executeQuery(query);
 				rs.next();
 				Account new_account = new Student_check_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
 				return new_account;
-			}else if(aid.charAt(0)=='2') {
+			}else if(type.equals("Interest-Checking")) {
 				query = "SELECT * From Account A, Interest_Checking S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
 				rs = stmt.executeQuery(query);
 				rs.next();
 				Account new_account = new Interest_check_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
 				return new_account;
-			}else if(aid.charAt(0)=='3') {
+			}else if(type.equals("Savings")) {
 				query = "SELECT * From Account A, Saving S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
 				rs = stmt.executeQuery(query);
 				rs.next();
 				Account new_account = new Saving_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
 				return new_account;
-			}else {
+			}else if(type.equals("Pocket")){
 				query = "SELECT * From Account A, Pocket S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
 				rs = stmt.executeQuery(query);
 				rs.next();

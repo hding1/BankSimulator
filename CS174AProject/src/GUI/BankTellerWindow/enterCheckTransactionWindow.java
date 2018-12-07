@@ -23,14 +23,13 @@ private JTextField check_customerName;
 	
 	public void launchEnterCheckTransactionWindow() {
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
-		//this.setLayout(new FlowLayout());
 		this.setTitle("Enter Check Transaction");
 		this.setSize(370,100);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		
-		JLabel checkLabel = new JLabel("Enter Customer Name:");
+		JLabel checkLabel = new JLabel("Enter Customer TaxID:");
 		checkLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		checkLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
 		

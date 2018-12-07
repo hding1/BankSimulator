@@ -37,10 +37,10 @@ public class deleteClosedAccountsAndCustomers {//implements ActionListener{
 			stmt = conn.createStatement();
 
 			try {
-				
+				System.out.println("test1");
 				String sql = "SELECT TaxID, Aid FROM Account a WHERE a.Open = '0'";
 				ResultSet rs = stmt.executeQuery(sql);
-
+				System.out.println("test2");
 				
 				/*PreparedStatement deleteCloseAccount = conn.prepareStatement("DELETE FROM Account WHERE Open = '0';");
 				PreparedStatement deleteCloseCustomer = conn.prepareStatement("D");
@@ -62,6 +62,7 @@ public class deleteClosedAccountsAndCustomers {//implements ActionListener{
 					deleteAccountTable.executeUpdate();
 				System.out.println("Delete Completed");
 				}
+				System.out.println("test3");
 				//delete no account customer
 				sql = "SELECT * FROM Customer C ";
 			      PreparedStatement update = conn.prepareStatement(sql);

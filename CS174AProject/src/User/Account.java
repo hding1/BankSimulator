@@ -15,6 +15,7 @@ public abstract class Account {
 	protected String Branch;
 	protected char Status;
 	private ArrayList<Transaction> tlist;
+	protected float initial;
 	final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
 
@@ -38,6 +39,7 @@ public abstract class Account {
 		this.Pname = TaxID;
 		this.Branch = Branch;
 		this.Status = status;
+		this.initial = initial;
 		tlist = new ArrayList<Transaction>();		
 		try {
 			// STEP 2: Register JDBC driver
@@ -65,6 +67,12 @@ public abstract class Account {
 				float num = rs.getFloat("Amount");
 	            tlist.add(new Transaction(tid, aid1, aid2,date,type,num));
 	        }
+			query = "SELECT * FROM Account A, initialAmount I WHERE A.Aid = I.Aid";
+			accountQuery = conn.prepareStatement(query);
+			rs = accountQuery.executeQuery();
+			if(rs.next()) {
+				initial = rs.getFloat(2);
+			}
 		} catch (SQLException se) {
 			// Handle errors for JDBC
 			se.printStackTrace();
@@ -127,6 +135,10 @@ public abstract class Account {
 	
 	public void setStatus(char Status) {
 		this.Status = Status;
+	}
+	
+	public float getInitial(){
+		return initial;
 	}
 
 }

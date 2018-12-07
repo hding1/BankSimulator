@@ -33,6 +33,8 @@ import java.text.NumberFormat;
 
 
 import GUI.BankTellerMonitor.createAccountMonitor;
+import GUI.windows.SelectAccountWindow;
+import User.Customer;
 
 public class createAccountWindow extends JFrame {
 	private IntTextField userid;
@@ -42,9 +44,17 @@ public class createAccountWindow extends JFrame {
 	private JTextField branch;
 	private String type;
 	private JFormattedTextField amount;
-	private String[] TypeString = { "Student_check", "Interest_check", "Saving" };
+	private String[] TypeString = { "Student-Checking", "Interest-Checking", "Savings","Pocket" };
 	private final JComboBox<String> TypeList = new JComboBox<>(TypeString);
+	private Customer c;
+	final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+	final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
 
+	final String USERNAME = "fliang";
+	final String PASSWORD = "123455";
+
+	Connection conn = null;
+	Statement stmt = null;
 	public void launchCreateAccountWindow() {
 //		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
 		this.setLayout(new FlowLayout());
@@ -83,24 +93,6 @@ public class createAccountWindow extends JFrame {
 		});
 		this.add(pwdLabel);
 		this.add(this.password);
-
-		// Name
-		this.pname = new JTextField();
-		this.pname.setPreferredSize(dim);
-		pname.addKeyListener(new java.awt.event.KeyAdapter() {
-			public void keyTyped(java.awt.event.KeyEvent e) {
-				if (pname.getText().length() >= 15)
-					e.consume();
-			}
-		});
-		this.add(userName);
-		this.add(this.pname);
-
-		// address
-		this.address = new JTextField();
-		this.address.setPreferredSize(dim);
-		this.add(addressName);
-		this.add(this.address);
 
 		this.add(firstAccount);
 		// branch
@@ -150,6 +142,7 @@ public class createAccountWindow extends JFrame {
 		TypeList.setPreferredSize(dim);
 		this.add(typeName);
 		this.getContentPane().add(TypeList);
+		
 
 		// Register Button
 		JButton Button1 = new JButton("Create");

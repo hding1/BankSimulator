@@ -2,13 +2,13 @@ package GUI.BankTellerMonitor;
 
 import java.awt.event.ActionListener;
 
-
 import GUI.windows.BankTellerWindow;
 import User.Interest_check_account;
 import User.Saving_account;
 import User.Student_check_account;
+import User.Transaction;
 import GUI.BankTellerWindow.*;
-import GUI.BankTellerMonitor.*;
+import GUI.windows.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
@@ -80,6 +80,8 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 			break;
 		case "4":
 			System.out.println("4");
+			DTERWindow dw = new DTERWindow();
+			dw.launchWindow();
 
 			break;
         case "5":
@@ -162,8 +164,46 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						}
 					}
 					if(flag) {
-						float interest = savinglist.get(i).getAmount()*savinglist.get(i).getIntere_rate()/100;
-						float amount = savinglist.get(i).getAmount()+interest;
+						float[] result = new float[30];
+						ArrayList<Transaction> transactions = new ArrayList<Transaction>(); 
+						for(int x = 0; x < transactions.size() ; x++) {
+							Transaction tran = transactions.get(x);
+							String date = transactions.get(x).getDate().substring(6);
+							int day = Integer.parseInt(date);
+							if(day<=0) {
+								day = 1;
+							}
+							if(day>30) {
+								day=30;
+							}
+							if(tran.getType()=="Deposit") {
+								result[day]+=tran.getAmount();
+							}
+							if(tran.getType()=="Withdraw") {
+								result[day]-=tran.getAmount();
+							}
+							if(tran.getType()=="Transfer") {
+								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+									result[day]-=tran.getAmount();
+								}else {
+									result[day]+=tran.getAmount();
+								}
+							}
+							if(tran.getType()=="Wire") {
+								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+									result[day]-=tran.getAmount();
+								}else {
+									result[day]+=tran.getAmount();
+								}
+							}
+						}
+						float interest = 0;
+						float amount = savinglist.get(i).getInitial();
+						for(int j = 0;j<30;j++) {
+							amount += result[j];
+							interest += amount*savinglist.get(i).getIntere_rate()/100/30/12;
+						}
+						amount += interest;
 						sql = "UPDATE Account SET Amount = "+amount+"WHERE Aid = '"+savinglist.get(i).getAccount()+"'";
 						update = conn.prepareStatement(sql);
 						update.executeUpdate();
@@ -187,8 +227,46 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 
 					}
 					if(flag) {
-						float interest = studentlist.get(i).getAmount()*studentlist.get(i).getIntere_rate()/100;
-						float amount = studentlist.get(i).getAmount()+interest;
+						float[] result = new float[30];
+						ArrayList<Transaction> transactions = new ArrayList<Transaction>(); 
+						for(int x = 0; x < transactions.size() ; x++) {
+							Transaction tran = transactions.get(x);
+							String date = transactions.get(x).getDate().substring(6);
+							int day = Integer.parseInt(date);
+							if(day<=0) {
+								day = 1;
+							}
+							if(day>30) {
+								day=30;
+							}
+							if(tran.getType()=="Deposit") {
+								result[day]+=tran.getAmount();
+							}
+							if(tran.getType()=="Withdraw") {
+								result[day]-=tran.getAmount();
+							}
+							if(tran.getType()=="Transfer") {
+								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+									result[day]-=tran.getAmount();
+								}else {
+									result[day]+=tran.getAmount();
+								}
+							}
+							if(tran.getType()=="Wire") {
+								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+									result[day]-=tran.getAmount();
+								}else {
+									result[day]+=tran.getAmount();
+								}
+							}
+						}
+						float interest = 0;
+						float amount = savinglist.get(i).getInitial();
+						for(int j = 0;j<30;j++) {
+							amount += result[j];
+							interest += amount*savinglist.get(i).getIntere_rate()/100/30/12;
+						}
+						amount += interest;
 						sql = "UPDATE Account SET Amount = "+amount+"WHERE Aid = '"+studentlist.get(i).getAccount()+"'";
 						update = conn.prepareStatement(sql);
 						update.executeUpdate();
@@ -213,8 +291,46 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 					}
 
 					if(flag) {
-						float interest = checkinglist.get(i).getAmount()*checkinglist.get(i).getInterest_rate()/100;
-						float amount = checkinglist.get(i).getAmount()+interest;
+						float[] result = new float[30];
+						ArrayList<Transaction> transactions = new ArrayList<Transaction>(); 
+						for(int x = 0; x < transactions.size() ; x++) {
+							Transaction tran = transactions.get(x);
+							String date = transactions.get(x).getDate().substring(6);
+							int day = Integer.parseInt(date);
+							if(day<=0) {
+								day = 1;
+							}
+							if(day>30) {
+								day=30;
+							}
+							if(tran.getType()=="Deposit") {
+								result[day]+=tran.getAmount();
+							}
+							if(tran.getType()=="Withdraw") {
+								result[day]-=tran.getAmount();
+							}
+							if(tran.getType()=="Transfer") {
+								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+									result[day]-=tran.getAmount();
+								}else {
+									result[day]+=tran.getAmount();
+								}
+							}
+							if(tran.getType()=="Wire") {
+								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+									result[day]-=tran.getAmount();
+								}else {
+									result[day]+=tran.getAmount();
+								}
+							}
+						}
+						float interest = 0;
+						float amount = savinglist.get(i).getInitial();
+						for(int j = 0;j<30;j++) {
+							amount += result[j];
+							interest += amount*savinglist.get(i).getIntere_rate()/100/30/12;
+						}
+						amount += interest;
 						sql = "UPDATE Account SET Amount = "+amount+"WHERE Aid = '"+checkinglist.get(i).getAccount()+"'";
 						update = conn.prepareStatement(sql);
 						update.executeUpdate();

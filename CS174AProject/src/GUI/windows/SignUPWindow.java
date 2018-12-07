@@ -42,7 +42,7 @@ public class SignUPWindow extends JFrame {
 	private JTextField branch;
 	private String type;
 	private JFormattedTextField amount;
-	private String[] TypeString = { "Student_check", "Interest_check", "Saving" };
+	private String[] TypeString = { "Student-Checking", "Interest-Checking","Savings" };
 	private final JComboBox<String> TypeList = new JComboBox<>(TypeString);
 
 	public void launchSignUPWindow() {
@@ -199,7 +199,6 @@ public class SignUPWindow extends JFrame {
 	public String getAccountType() {
 		return (String) TypeList.getSelectedItem();
 	}
-
 }
 
 class IntTextField extends JTextField {

@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -31,6 +32,7 @@ public class submitCheckWindow extends JFrame{
 	private JList ListAccount;
 	private JTextField enterCheckAid;
 	private JTextField enterCheckAmount;
+	private JTextField enterCheckNum;
 
 	final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	final String DB_URL = "jdbc:oracle:thin:@cloud-34-133.eci.ucsb.edu:1521:XE";
@@ -41,6 +43,10 @@ public class submitCheckWindow extends JFrame{
 
 	Connection conn = null;
 	Statement stmt = null;
+	
+	public String getCheckNum() {
+		return this.enterCheckNum.getText();
+	}
 	
 	public String getSelectedAccount() {
 		return selectedAccount;
@@ -80,13 +86,15 @@ public class submitCheckWindow extends JFrame{
 
 		      
 
-		      String sql = "SELECT A.Aid FROM Account A, Customer C WHERE A.TaxID = C.TaxID AND C.Name = '" + CustomerName + "'";
+		      String sql = "SELECT O.Aid, A.Type FROM Own_by O INNER JOIN Customer C ON C.TaxID = '" + CustomerName + "' AND O.TaxID = C.TaxID INNER JOIN Account A ON O.Aid = A.Aid";
 		      final DefaultListModel a3 = new DefaultListModel();
 		      
 		      ResultSet rs = stmt.executeQuery(sql);
 		      while(rs.next()){
-		    	  if(rs.getString("Aid").substring(0, 1).equals("1") || (rs.getString("Aid").substring(0, 1).equals("2")) || (rs.getString("Aid").substring(0, 1).equals("3")))
-		    	  a3.addElement(rs.getString("Aid"));
+		    	  System.out.println(rs.getString("Type") + "1");
+		    	  String type = rs.getString("Type").replaceAll(" ", "");
+		    	  if(type.equals("Student-Checking") || type.equals("Interest-Checking") || type.equals("Savings"))
+		    		  a3.addElement(rs.getString("Aid"));
 		    	  
 		      }
 
@@ -121,7 +129,7 @@ public class submitCheckWindow extends JFrame{
 		      this.add(ListAccountPane);
 		      
 		      
-		      JLabel checkAid = new JLabel("Enter the Account You Want to Make Check Showned Above:");
+		      JLabel checkAid = new JLabel("Enter an Account ID above to Make Check:");
 		      checkAid.setAlignmentX(Component.CENTER_ALIGNMENT);
 		      checkAid.setAlignmentY(Component.CENTER_ALIGNMENT);
 		      this.add(checkAid);
@@ -141,8 +149,19 @@ public class submitCheckWindow extends JFrame{
 		      enterCheckAmount.setMaximumSize(new Dimension(300, 30));
 		      enterCheckAmount.setAlignmentX(Component.CENTER_ALIGNMENT);
 		      enterCheckAmount.setAlignmentY(Component.CENTER_ALIGNMENT);
-		      this.add(enterCheckAmount);		     
+		      this.add(enterCheckAmount);
 		      
+		      JLabel checkNum = new JLabel("Enter the Check Number: ");
+		      checkNum.setAlignmentX(Component.CENTER_ALIGNMENT);
+		      checkNum.setAlignmentY(Component.CENTER_ALIGNMENT);
+		      this.add(checkNum);
+		      
+		      enterCheckNum = new JTextField("");
+		      enterCheckNum.setMaximumSize(new Dimension(300, 30));
+		      enterCheckNum.setAlignmentX(Component.CENTER_ALIGNMENT);
+		      enterCheckNum.setAlignmentY(Component.CENTER_ALIGNMENT);
+		      this.add(enterCheckNum);		     
+
 		      
 		      JButton submit = new JButton("Submit");
 		      submitCheckMonitor crm = new submitCheckMonitor(this);

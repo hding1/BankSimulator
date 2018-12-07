@@ -39,7 +39,7 @@ public class Transaction {
 		return this.tid;
 	}
 	
-	public double getAmount() {
+	public float getAmount() {
 		return this.Amount;
 	}
 	
