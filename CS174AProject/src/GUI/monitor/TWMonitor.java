@@ -86,10 +86,7 @@ public class TWMonitor implements ActionListener {
 			}else {
 				typeT = "Pay-Friend";
 				total = this.tw.a.getAmount()- this.tw.getAmount();
-				if(!(this.tw.getAccountID().charAt(0)=='4')) {
-					JOptionPane.showMessageDialog(this.tw, "Cannot transfer to a non-pocket account", "Invalid Input", JOptionPane.PLAIN_MESSAGE);
-					break;
-				}
+
 			}
 			
 			if(total>=0) {

@@ -2,12 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="String" key="selection"/>
+		<item value="not " key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="not "/>
+			<item value="not a pocket"/>
+			<item value="initial"/>
+			<item value="pull"/>
+			<item value="flag"/>
+			<item value="td.a"/>
+			<item value="fliang"/>
+			<item value="type"/>
 			<item value="int"/>
 			<item value="TransactionID"/>
 			<item value="Account_2_ID"/>
@@ -15,16 +23,9 @@
 			<item value="close"/>
 			<item value="rs"/>
 			<item value="invalid"/>
-			<item value="query"/>
-			<item value="total"/>
-			<item value="total&#x09;&#x09;"/>
-			<item value="td"/>
-			<item value="test4"/>
-			<item value="own"/>
-			<item value="SignUP"/>
-			<item value="createing"/>
 		</list>
 		<list key="replacehistory">
+			<item value="hding"/>
 			<item value="String"/>
 			<item value="tid"/>
 			<item value="Aid2"/>
@@ -39,7 +40,7 @@
 		<item value="290" key="DIALOG_WIDTH"/>
 		<item value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont" key="DIALOG_FONT_NAME"/>
 		<item value="409" key="DIALOG_HEIGHT"/>
-		<item value="887" key="DIALOG_X_ORIGIN"/>
-		<item value="232" key="DIALOG_Y_ORIGIN"/>
+		<item value="864" key="DIALOG_X_ORIGIN"/>
+		<item value="287" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

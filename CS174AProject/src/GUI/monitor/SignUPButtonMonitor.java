@@ -72,9 +72,10 @@ public class SignUPButtonMonitor implements ActionListener {
 				stmt = conn.createStatement();
 
 //			      createTable(conn);
-
+				System.out.println("test3");
 				insertCustomer(conn);
 				if (flag) {
+					System.out.println("test4");
 					insertAccount(conn);
 				}
 			} catch (SQLException se) {
@@ -130,10 +131,12 @@ public class SignUPButtonMonitor implements ActionListener {
 		String new_name = this.SignUPWindow.getPname();
 		String new_address = this.SignUPWindow.getaddress();
 		try {
+			System.out.println("test1");
 			PreparedStatement insert = conn
 					.prepareStatement("INSERT INTO Customer (Name, TaxID, Address, PIN) VALUES ('" + new_name + "', '"
 							+ new_id + "','" + new_address + "','" + new_pin + "')");
 			insert.executeUpdate();
+			System.out.println("test2");
 		} catch (Exception e) {
 			System.out.println(e);
 

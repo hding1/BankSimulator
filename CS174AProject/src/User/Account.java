@@ -65,13 +65,13 @@ public abstract class Account {
 				String aid2 = rs.getString("Aid_2");
 				String type = rs.getString("TypeTransaction");
 				float num = rs.getFloat("Amount");
-	            tlist.add(new Transaction(tid, aid1, aid2,date,type,num));
+	            tlist.add(new Transaction(tid, date,aid1, aid2,type,num));
 	        }
-			query = "SELECT * FROM Account A, initialAmount I WHERE A.Aid = I.Aid";
+			query = "SELECT I.Amount FROM Account A, initialAmount I WHERE A.Aid = I.Aid AND A.Aid = '"+Account_id+"'";
 			accountQuery = conn.prepareStatement(query);
 			rs = accountQuery.executeQuery();
 			if(rs.next()) {
-				initial = rs.getFloat(2);
+				this.initial = rs.getFloat("Amount");
 			}
 		} catch (SQLException se) {
 			// Handle errors for JDBC

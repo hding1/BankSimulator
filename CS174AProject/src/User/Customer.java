@@ -59,7 +59,7 @@ public class Customer {
 				accountQuery = conn.prepareStatement(query);
 				ResultSet rs1 = accountQuery.executeQuery();
 				if(rs1.next()) {
-					String type = rs1.getString("Type");
+					String type = rs1.getString("Type").replaceAll(" ","");
 					System.out.println(type);
 					Accounts.add(getAccount(aid,type.replaceAll(" ","")));
 				}
@@ -93,14 +93,32 @@ public class Customer {
 		}
 		return result;
 	}
+	public String[] getAccountID1() {
+		String[] result = new String[Accounts.size()];
+		for(int i = 0;i<Accounts.size();i++) {
+			if(!(Accounts.get(i) instanceof Pocket_account)) {
+			result[i] = Accounts.get(i).getAccount();
+			}
+		}
+		return result;
+	}
 	public String[] getSACID() {
 		ArrayList<String> list = new ArrayList<String>();
 		for(int i = 0;i<Accounts.size();i++) {
-			if(!(Accounts.get(i) instanceof Pocket_account)) {
+			if(!(Accounts.get(i) instanceof Pocket_account)&&Accounts.get(i)!=null) {
 				list.add(Accounts.get(i).getAccount());
 			}
 		}
 		return list.toArray(new String[list.size()]);
+	}
+	public Account getAccount(String aid){
+		
+		for(int i = 0;i<Accounts.size();i++) {
+			if((Accounts.get(i).getAccount().equals(aid))) {
+				return Accounts.get(i);
+			}
+		}
+		return null;
 	}
 	public String getName() {
 		return this.Name;
@@ -141,27 +159,31 @@ public class Customer {
 			if(type.equals("Student-Checking")) {
 				query = "SELECT * From Account A, Student_Checking S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
 				rs = stmt.executeQuery(query);
-				rs.next();
+				if(rs.next()) {
 				Account new_account = new Student_check_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
 				return new_account;
+				}
 			}else if(type.equals("Interest-Checking")) {
 				query = "SELECT * From Account A, Interest_Checking S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
 				rs = stmt.executeQuery(query);
-				rs.next();
+				if(rs.next()) {
 				Account new_account = new Interest_check_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
 				return new_account;
+				}
 			}else if(type.equals("Savings")) {
 				query = "SELECT * From Account A, Saving S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
 				rs = stmt.executeQuery(query);
-				rs.next();
+				if(rs.next()) {
+
 				Account new_account = new Saving_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getFloat("Interest_rate"));
 				return new_account;
+				}
 			}else if(type.equals("Pocket")){
 				query = "SELECT * From Account A, Pocket S WHERE A.Aid = "+aid +"AND S.Aid="+aid;
 				rs = stmt.executeQuery(query);
-				rs.next();
-				Account new_account = new Pocket_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getString("Link_aid"));
-				return new_account;
+				if(rs.next()) {
+					return new Pocket_account(rs.getString("Aid"),rs.getString("TaxID"),rs.getFloat("Amount"),rs.getString("Branch"),rs.getString("Open").charAt(0),rs.getString("Link_aid"));
+				}
 			}
 			
 			

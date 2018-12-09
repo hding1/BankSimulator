@@ -114,14 +114,22 @@ public class monthlyStatementWindow extends JFrame{
 			      ResultSet rs3 = stmt3.executeQuery(getTransaction);
 			      while(rs3.next()) {
 			    	  String type = rs3.getString("TypeTransaction").replaceAll(" ", "");
-			    	  if(type.equals("Deposit")) 
-			    		  a4.addElement("Tid: " + rs3.getString("Tid") + "      " + rs3.getString("TypeTransaction") + "   To:" + rs3.getString("Aid_2") +  " $" + rs3.getString("Amount"));
-			    	  else if(type.equals("Check") || type.equals("Withdraw")) 
-			    		  a4.addElement("Tid: " + rs3.getString("Tid") + "      " + rs3.getString("TypeTransaction") + "   From:" + rs3.getString("Aid_1") +  " $" + rs3.getString("Amount"));
-			    	  else if(type.equals("Top-Up"))
-			    		  a4.addElement("Tid: " + rs3.getString("Tid") + "   From: " + rs3.getString("Aid_2") + " " + rs3.getString("TypeTransaction") + "   To:" + rs3.getString("Aid_1") +  " $" + rs3.getString("Amount"));
-			    	  else if(type.equals("Wire") || type.equals("Transfer"))
-			    		  a4.addElement("Tid: " + rs3.getString("Tid") + "   From: " + rs3.getString("Aid_1") + " " + rs3.getString("TypeTransaction") + "   To:" + rs3.getString("Aid_2") +  " $" + rs3.getString("Amount"));
+			          if(type.equals("Deposit")) 
+			           a4.addElement("Tid: " + rs3.getString("Tid") + "      " + rs3.getString("TypeTransaction") + "   To:" + rs3.getString("Aid_2") +  " $" + rs3.getString("Amount"));
+			          else if(type.equals("Check") || type.equals("Withdrawal")) 
+			           a4.addElement("Tid: " + rs3.getString("Tid") + "      " + rs3.getString("TypeTransaction") + "   From:" + rs3.getString("Aid_1") +  " $" + rs3.getString("Amount"));
+			          else if(type.equals("Top-Up"))
+			           a4.addElement("Tid: " + rs3.getString("Tid") + "   From: " + rs3.getString("Aid_2") + " " + rs3.getString("TypeTransaction") + "   To:" + rs3.getString("Aid_1") +  " $" + rs3.getString("Amount"));
+			          else if(type.equals("Wire") || type.equals("Transfer"))
+			           a4.addElement("Tid: " + rs3.getString("Tid") + "   From: " + rs3.getString("Aid_1") + " " + rs3.getString("TypeTransaction") + "   To:" + rs3.getString("Aid_2") +  " $" + rs3.getString("Amount"));
+			          else if(type.equals("Purchase")) 
+			           a4.addElement("Tid: " + rs3.getString("Tid") + "      " + rs3.getString("Aid_1") + "      " + rs3.getString("TypeTransaction") + " $" + rs3.getString("Amount"));
+			          else if(type.equals("Collect"))
+			           a4.addElement("Tid: " + rs3.getString("Tid") + "   From: " + rs3.getString("Aid_2") + " " + rs3.getString("TypeTransaction") + "   To:" + rs3.getString("Aid_1") +  " $" + rs3.getString("Amount"));
+			          else if(type.equals("Pay-Friend"))
+			           a4.addElement("Tid: " + rs3.getString("Tid") + "   From: " + rs3.getString("Aid_1") + " " + rs3.getString("TypeTransaction") + "   To:" + rs3.getString("Aid_2") +  " $" + rs3.getString("Amount"));
+			          else if(type.equals("interest"))
+			           a4.addElement("Tid: " + rs3.getString("Tid") + "      " + rs3.getString("TypeTransaction") + "   To:" + rs3.getString("Aid_2") +  " $" + rs3.getString("Amount"));
 			      }
 		      }
 		      

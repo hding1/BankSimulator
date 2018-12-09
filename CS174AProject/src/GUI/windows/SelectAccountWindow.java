@@ -56,8 +56,10 @@ public class SelectAccountWindow extends JFrame {
 		//List
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		for(int i = 0;i<c.getList().size();i++) {
+			if(c.getList().get(i)!=null) {
 			listModel.addElement((i+1)+".  "+ String.format("%15s", c.getList().get(i).getAccount())+String.format("%,22.2f", c.getList().get(i).getAmount()));
-		}
+			}
+			}
 		AccountList = new JList<>(listModel);
 		AccountList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		add(new JScrollPane(AccountList));

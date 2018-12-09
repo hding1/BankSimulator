@@ -58,7 +58,7 @@ public class TWWindow extends JFrame {
 		switch(type) {
 		case 1:
 			title = "Transfer";
-			String[] accountString = c.getAccountID();
+			String[] accountString = c.getSACID();
 			AccountList = new JComboBox<>(accountString);
 			AccountList.setPreferredSize(dim);
 			this.getContentPane().add(AccountList);

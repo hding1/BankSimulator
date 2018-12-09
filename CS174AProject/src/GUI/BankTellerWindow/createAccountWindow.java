@@ -59,7 +59,7 @@ public class createAccountWindow extends JFrame {
 //		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.Y_AXIS));
 		this.setLayout(new FlowLayout());
 		this.setTitle("Create Customer");
-		this.setSize(240, 260);
+		this.setSize(240, 200);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);

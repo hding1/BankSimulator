@@ -163,12 +163,14 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 							flag = false;
 						}
 					}
+					System.out.println(savinglist.get(i).getInitial()+" "+savinglist.get(i).getAccount());
 					if(flag) {
 						float[] result = new float[30];
 						ArrayList<Transaction> transactions = new ArrayList<Transaction>(); 
+						transactions = savinglist.get(i).getList();
 						for(int x = 0; x < transactions.size() ; x++) {
 							Transaction tran = transactions.get(x);
-							String date = transactions.get(x).getDate().substring(6);
+							String date = transactions.get(x).getDate().replaceAll(" ","").substring(6);
 							int day = Integer.parseInt(date);
 							if(day<=0) {
 								day = 1;
@@ -200,6 +202,7 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						float interest = 0;
 						float amount = savinglist.get(i).getInitial();
 						for(int j = 0;j<30;j++) {
+							System.out.println(amount);
 							amount += result[j];
 							interest += amount*savinglist.get(i).getIntere_rate()/100/30/12;
 						}
@@ -223,15 +226,17 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						
 						if(studentlist.get(i).getList().get(j).getType().replaceAll(" ", "").equals("interest")) {
 							flag = false;
+							added = false;
 						}
 
 					}
 					if(flag) {
 						float[] result = new float[30];
 						ArrayList<Transaction> transactions = new ArrayList<Transaction>(); 
+						transactions = studentlist.get(i).getList();
 						for(int x = 0; x < transactions.size() ; x++) {
 							Transaction tran = transactions.get(x);
-							String date = transactions.get(x).getDate().substring(6);
+							String date = transactions.get(x).getDate().replaceAll(" ","").substring(6);
 							int day = Integer.parseInt(date);
 							if(day<=0) {
 								day = 1;
@@ -242,18 +247,21 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 							if(tran.getType()=="Deposit") {
 								result[day]+=tran.getAmount();
 							}
+							if(tran.getType()=="Check") {
+								result[day]-=tran.getAmount();
+							}
 							if(tran.getType()=="Withdraw") {
 								result[day]-=tran.getAmount();
 							}
 							if(tran.getType()=="Transfer") {
-								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+								if(tran.getAid1().equals(studentlist.get(i).getAccount())) {
 									result[day]-=tran.getAmount();
 								}else {
 									result[day]+=tran.getAmount();
 								}
 							}
 							if(tran.getType()=="Wire") {
-								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+								if(tran.getAid1().equals(studentlist.get(i).getAccount())) {
 									result[day]-=tran.getAmount();
 								}else {
 									result[day]+=tran.getAmount();
@@ -261,12 +269,15 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 							}
 						}
 						float interest = 0;
-						float amount = savinglist.get(i).getInitial();
+						float amount = studentlist.get(i).getInitial();
+						
 						for(int j = 0;j<30;j++) {
 							amount += result[j];
-							interest += amount*savinglist.get(i).getIntere_rate()/100/30/12;
+							
+							interest += amount*studentlist.get(i).getIntere_rate()/100/30/12;
 						}
 						amount += interest;
+						
 						sql = "UPDATE Account SET Amount = "+amount+"WHERE Aid = '"+studentlist.get(i).getAccount()+"'";
 						update = conn.prepareStatement(sql);
 						update.executeUpdate();
@@ -289,13 +300,14 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 							flag = false;
 						}
 					}
-
 					if(flag) {
 						float[] result = new float[30];
 						ArrayList<Transaction> transactions = new ArrayList<Transaction>(); 
+						transactions = checkinglist.get(i).getList();
 						for(int x = 0; x < transactions.size() ; x++) {
 							Transaction tran = transactions.get(x);
-							String date = transactions.get(x).getDate().substring(6);
+							String date = transactions.get(x).getDate().replaceAll(" ","").substring(6);
+							System.out.println(date);
 							int day = Integer.parseInt(date);
 							if(day<=0) {
 								day = 1;
@@ -309,15 +321,18 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 							if(tran.getType()=="Withdraw") {
 								result[day]-=tran.getAmount();
 							}
+							if(tran.getType()=="Check") {
+								result[day]-=tran.getAmount();
+							}
 							if(tran.getType()=="Transfer") {
-								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+								if(tran.getAid1().equals(checkinglist.get(i).getAccount())) {
 									result[day]-=tran.getAmount();
 								}else {
 									result[day]+=tran.getAmount();
 								}
 							}
 							if(tran.getType()=="Wire") {
-								if(tran.getAid1().equals(savinglist.get(i).getAccount())) {
+								if(tran.getAid1().equals(checkinglist.get(i).getAccount())) {
 									result[day]-=tran.getAmount();
 								}else {
 									result[day]+=tran.getAmount();
@@ -325,10 +340,10 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 							}
 						}
 						float interest = 0;
-						float amount = savinglist.get(i).getInitial();
+						float amount = checkinglist.get(i).getInitial();
 						for(int j = 0;j<30;j++) {
 							amount += result[j];
-							interest += amount*savinglist.get(i).getIntere_rate()/100/30/12;
+							interest += amount*checkinglist.get(i).getInterest_rate()/100/30/12;
 						}
 						amount += interest;
 						sql = "UPDATE Account SET Amount = "+amount+"WHERE Aid = '"+checkinglist.get(i).getAccount()+"'";
@@ -339,7 +354,6 @@ public class BankTellerMonitor extends JFrame implements ActionListener{
 						update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + tid + "','" + timeStamp + "','"+checkinglist.get(i).getAccount()+"','" +checkinglist.get(i).getAccount()+"','interest'," + interest+")");
 						update.executeUpdate();
 					}else {
-						added= true;
 						System.out.println("Already Added");
 					}
 					flag = true;

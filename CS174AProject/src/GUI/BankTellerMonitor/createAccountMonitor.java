@@ -7,8 +7,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Scanner;
-
 //
 import java.awt.*;
 import javax.swing.*;
@@ -28,6 +26,7 @@ import GUI.windows.SelectAccountWindow;
 import GUI.BankTellerWindow.*;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 
 public class createAccountMonitor implements ActionListener {
 	private createAccountWindow caw;
@@ -81,7 +80,6 @@ public class createAccountMonitor implements ActionListener {
 	  			    	  String pin = rs.getString("PIN");
 	  			    	  if(pin.equals(this.caw.getPIN())) {
 	  			    		  	c = new Customer(rs.getString("Name"),rs.getString("TaxID"),rs.getString("Address"),rs.getString("PIN"));
-	  			    		  	
 	  			    	  }else {
 	  			    		  JOptionPane.showMessageDialog(null, "Incorrect Password!", "Incorrect Password!", JOptionPane.PLAIN_MESSAGE);
 	  			    	  }
@@ -193,6 +191,7 @@ public class createAccountMonitor implements ActionListener {
 			JOptionPane.showMessageDialog(this.caw, "You must have a positive initial deposit.",
 					"Initial Deposit", JOptionPane.ERROR_MESSAGE);
 		} else {
+			
 			boolean unique = true;
 			switch (type1.replaceAll(" ","")) {
 			case "Student-Checking":
@@ -219,6 +218,7 @@ public class createAccountMonitor implements ActionListener {
 						lw.launchBankTellerWindow();
 						unique = false;
 						this.caw.setVisible(false);
+						JOptionPane.showMessageDialog(null, type1+"Account Created!", "Succeed", JOptionPane.PLAIN_MESSAGE);
 					} catch (java.sql.SQLIntegrityConstraintViolationException e) {
 						System.out.println(e);
 					} finally {
@@ -250,6 +250,7 @@ public class createAccountMonitor implements ActionListener {
 						BankTellerWindow lw = new BankTellerWindow();
 						lw.launchBankTellerWindow();
 						this.caw.setVisible(false);
+						JOptionPane.showMessageDialog(null, type1+"Account Created!", "Succeed", JOptionPane.PLAIN_MESSAGE);
 					} catch (Exception e) {
 						System.out.println(e);
 					} finally {
@@ -281,6 +282,7 @@ public class createAccountMonitor implements ActionListener {
 						lw.launchBankTellerWindow();
 						unique = false;
 						this.caw.setVisible(false);
+						JOptionPane.showMessageDialog(null, type1+"Account Created!", "Succeed", JOptionPane.PLAIN_MESSAGE);
 					} catch (Exception e) {
 						System.out.println(e);
 					} finally {
@@ -289,9 +291,20 @@ public class createAccountMonitor implements ActionListener {
 				}
 				break;
 			case "Pocket":
+				if(initialAmount>c.getAccount(LinkedAID).getAmount()) {
+					JOptionPane.showMessageDialog(this.caw, "You must have a sufficient balance in linked account to top-up.",
+							"Initial Deposit", JOptionPane.ERROR_MESSAGE);
+					this.caw.setVisible(false);
+					createAccountWindow newWindow = new createAccountWindow();
+					newWindow.setVisible(true);
+				}else {
 				while (unique) {
+					
 					try {
 						String account_id = AIDGenerator(4);
+						float link_amount = c.getAccount(LinkedAID).getAmount()-initialAmount;
+						
+					
 						PreparedStatement insert = conn.prepareStatement(
 								"INSERT INTO Account(Aid, TaxID, Amount, Branch, Open,Type) VALUES ('" + account_id + "', '"
 										+ new_id + "', " + initialAmount + ", '" + new_branch + "', '1','Pocket')");
@@ -306,17 +319,24 @@ public class createAccountMonitor implements ActionListener {
 						insert = conn.prepareStatement("INSERT INTO initialAmount(Aid, Amount) VALUES('"+ account_id +"',"+initialAmount+")");
 						insert.executeUpdate();
 						System.out.println("Insert completed!");
-						
+						PreparedStatement update = conn.prepareStatement(
+								"UPDATE Account SET amount = "+link_amount+" WHERE Aid = '"+LinkedAID+"'");
+					update.executeUpdate();
+					String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+					update = conn.prepareStatement("INSERT INTO Record_Transaction (Tid, TransactionDate, Aid_1, Aid_2, TypeTransaction, Amount ) VALUES ('" + TIDGenerator(5) + "','" + timeStamp + "','"+account_id+"','" +LinkedAID+"','Top-UP'," + initialAmount+")");
+					update.executeUpdate();
 						BankTellerWindow lw = new BankTellerWindow();
 						lw.launchBankTellerWindow();
-
 						unique = false;
+			    		flag = true;
+			    		JOptionPane.showMessageDialog(null, type1+"Account Created!", "Succeed", JOptionPane.PLAIN_MESSAGE);
 						this.caw.setVisible(false);
 					} catch (Exception e) {
 						System.out.println(e);
 					} finally {
 						System.out.println("funcion completed!");
 					}
+				}
 				}
 				break;
 			}
@@ -328,6 +348,16 @@ public class createAccountMonitor implements ActionListener {
 		String result = Integer.toString(type);
 		Random rand = new Random();
 		for (int i = 0; i < 4; i++) {
+			int rand_int = rand.nextInt(10);
+			result += Integer.toString(rand_int);
+		}
+
+		return result;
+	}
+	public String TIDGenerator(int type) {
+		String result = Integer.toString(type);
+		Random rand = new Random();
+		for (int i = 0; i < 9; i++) {
 			int rand_int = rand.nextInt(10);
 			result += Integer.toString(rand_int);
 		}

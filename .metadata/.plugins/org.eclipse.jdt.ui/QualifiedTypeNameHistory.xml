@@ -35,4 +35,6 @@
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
     <fullyQualifiedTypeName name="GUI.windows.PocketWindow"/>
     <fullyQualifiedTypeName name="User.Pocket_account"/>
+    <fullyQualifiedTypeName name="GUI.windows.BankTellerWindow"/>
+    <fullyQualifiedTypeName name="User.Transaction"/>
 </qualifiedTypeNameHistroy>

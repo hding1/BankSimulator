@@ -93,9 +93,9 @@ public class submitCheckWindow extends JFrame{
 		      while(rs.next()){
 		    	  System.out.println(rs.getString("Type") + "1");
 		    	  String type = rs.getString("Type").replaceAll(" ", "");
-		    	  if(type.equals("Student-Checking") || type.equals("Interest-Checking") || type.equals("Savings"))
+		    	  if(type.equals("Student-Checking") || type.equals("Interest-Checking")) {
 		    		  a3.addElement(rs.getString("Aid"));
-		    	  
+		    	  }
 		      }
 
 
